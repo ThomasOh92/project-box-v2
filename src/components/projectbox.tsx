@@ -13,26 +13,30 @@ const ProjectBox: React.FC = () => {
     { icon: <FileCopyIcon />, name: 'Copy3' },
     { icon: <FileCopyIcon />, name: 'Copy4' },
   ];
-  
+
+  const layout = [
+    { i: "addButton", x: 11.45, y: 1.1, w: 0.5, h: 0.5, static: true },
+  ];
+
     
   return (
     <Box sx={{ height:500, transform: 'translateZ(0px)', flexGrow: 1, border: '1px solid grey', borderRadius: 5}}>
-      <ResponsiveReactGridLayout>
+      <ResponsiveReactGridLayout className="layout" layouts={{lg: layout}} breakpoints={{lg: 1200}} cols={{lg: 12}}>
+        <div key="addButton">
+          <SpeedDial
+            ariaLabel="SpeedDial basic example"
+            icon={<SpeedDialIcon />}
+          >
+            {actions.map((action) => (
+              <SpeedDialAction
+                key={action.name}
+                icon={action.icon}
+                tooltipTitle={action.name}
+              />
+            ))}
+          </SpeedDial>
+        </div>
       </ResponsiveReactGridLayout>
-
-      <SpeedDial
-        ariaLabel="SpeedDial basic example"
-        sx={{ position: 'absolute', bottom: 16, right: 16 }}
-        icon={<SpeedDialIcon />}
-      >
-        {actions.map((action) => (
-          <SpeedDialAction
-            key={action.name}
-            icon={action.icon}
-            tooltipTitle={action.name}
-          />
-        ))}
-      </SpeedDial>
   </Box>
 
   );
