@@ -61,7 +61,7 @@ const ProjectBox: React.FC = () => {
           draggableHandle=".dragHandle">
           <Card key='stickyNote' variant='outlined' sx={{ display: 'flex', flexDirection: 'column' }}>
             <CardHeader className="dragHandle" sx={{ bgcolor: 'grey.200' }}/>
-            <Box sx={{ flex: 1, overflow: 'auto', p: 2 }}>
+            <Box sx={{ flex: 1, overflow: 'hidden', p: 2 }}>
               <TextareaAutosize
                 value={noteContent}
                 onChange={(event) => setNoteContent(event.target.value)}
@@ -70,6 +70,7 @@ const ProjectBox: React.FC = () => {
                 fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
                 fontSize: '1rem',
                 outline: 'none',
+                resize: 'none'
                  }} 
               />
             </Box>
