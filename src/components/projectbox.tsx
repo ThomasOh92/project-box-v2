@@ -1,12 +1,44 @@
 import * as React from 'react';
 const { useState } = React;
 import { WidthProvider, Responsive, Layout } from 'react-grid-layout';
-import {Box, SpeedDial, SpeedDialIcon, SpeedDialAction, TextareaAutosize}  from '@mui/material';
+import {Box, SpeedDial, SpeedDialIcon, SpeedDialAction, TextareaAutosize, ButtonBase, Typography, Link}  from '@mui/material';
 import { Card, CardHeader, CardContent } from '@mui/material';
 import FileCopyIcon from '@mui/icons-material/FileCopyOutlined';
 import { GlobalStyles } from '@mui/system';
+import DescriptionIcon from '@mui/icons-material/Description';
+import SlideshowIcon from '@mui/icons-material/Slideshow';
+import GridOnIcon from '@mui/icons-material/GridOn';
+import { SvgIconTypeMap } from '@mui/material/SvgIcon';
+import { OverridableComponent } from '@mui/material/OverridableComponent';
+
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
+
+interface LinkProps {
+  url: string;
+  title: string;
+  icon: OverridableComponent<SvgIconTypeMap<{}, "svg">>;
+  key: string;
+}
+
+const DraggableLinkCard: React.FC<LinkProps> = ({ title, icon: Icon, url, key }) => {
+  return (
+    <Card key={key} variant='outlined'>
+      <CardHeader className="dragHandle" sx={{ bgcolor: 'grey.200' }}/>
+      <CardContent>
+        <ButtonBase sx={{flexDirection: 'column' }}>
+          <Icon />
+          <Link href={url} underline="none">
+            <Typography>{title}</Typography>
+          </Link>
+        </ButtonBase>
+      </CardContent>
+    </Card>
+  );
+};
+
+
+
 
 const ProjectBox: React.FC = () => {
   
@@ -19,9 +51,12 @@ const ProjectBox: React.FC = () => {
   ];
   const layout: Layout[] = [
     { i: "addButton", x: 40, y: 1.75, w: 2, h: 2, static: true, minW: 2, minH: 2},
-    { i: "stickyNote", x: 0, y: 0, w: 7, h: 2, minW: 2, minH: 0, resizeHandles: ['se']},
+    { i: "exampleStickyNote", x: 0, y: 0, w: 7, h: 2, minW: 2, minH: 0, resizeHandles: ['se']},
+    { i: "exampleDocLink1", x: 8, y: 0, w: 2, h: 2, },
+    { i: "exampleDocLink2", x: 12, y: 0, w: 2, h: 2 },
+    { i: "exampleSlideLink", x: 16, y: 0, w: 2, h: 2 },
+    { i: "exampleSheetLink", x: 20, y: 0, w: 2, h: 2 },
   ];
-
     
   return (
     <>
@@ -59,7 +94,7 @@ const ProjectBox: React.FC = () => {
           cols={{lg: 40}} 
           compactType={null} 
           draggableHandle=".dragHandle">
-          <Card key='stickyNote' variant='outlined' sx={{ display: 'flex', flexDirection: 'column' }}>
+          <Card key='exampleStickyNote' variant='outlined' sx={{ display: 'flex', flexDirection: 'column' }}>
             <CardHeader className="dragHandle" sx={{ bgcolor: 'grey.200' }}/>
             <Box sx={{ flex: 1, overflow: 'hidden', p: 2 }}>
               <TextareaAutosize
@@ -75,6 +110,10 @@ const ProjectBox: React.FC = () => {
               />
             </Box>
           </Card>
+          <DraggableLinkCard key='exampleDocLink1' title='Google Doc 1' icon={DescriptionIcon} url='https://docs.google.com/document/d/your-doc-id' />
+          <DraggableLinkCard key='exampleDocLink2' title='Google Doc 2' icon={DescriptionIcon} url='https://docs.google.com/presentation/d/your-slide-id' />
+          <DraggableLinkCard key='exampleSlideLink' title='Google Slide' icon={SlideshowIcon} url='https://docs.google.com/spreadsheets/d/your-sheet-id' />
+          <DraggableLinkCard key='exampleSheetLink' title='Google Sheet' icon={GridOnIcon} url='https://docs.google.com/spreadsheets/d/your-sheet-id' />
 
           <SpeedDial
             key="addButton"

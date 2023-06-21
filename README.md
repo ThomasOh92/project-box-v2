@@ -1,4 +1,4 @@
-# Current - Sprint 1, Step 1 - Sticky note added, resizable works, some kinks to fix
+# Current - Sprint 1 - Sticky note done. Working on file now
 
 ## Sprint 1 (starting pieces)
 ### 1. Add a set of initial starting elements (sticky note, file, weblink)
