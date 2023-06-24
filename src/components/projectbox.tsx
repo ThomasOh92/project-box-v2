@@ -23,11 +23,11 @@ const ProjectBox: React.FC = () => {
   ];
   const layout: Layout[] = [
     { i: "addButton", x: 40, y: 1.75, w: 2, h: 2, static: true, minW: 2, minH: 2},
-    { i: "exampleStickyNote", x: 0, y: 0, w: 7, h: 2, minW: 2, minH: 0, resizeHandles: ['se']},
-    { i: "exampleDocLink1", x: 8, y: 0, w: 2, h: 0.5},
-    { i: "exampleDocLink2", x: 11, y: 0, w: 2, h: 0.5 },
-    { i: "exampleSlideLink", x: 14, y: 0, w: 2, h: 0.5 },
-    { i: "exampleSheetLink", x: 17, y: 0, w: 2, h: 0.5 },
+    { i: "exampleStickyNote", x: 0, y: 0, w: 7, h: 2, minW: 2, minH: 0, resizeHandles: ['se'], placeholder: true},
+    { i: "exampleDocLink1", x: 8, y: 0, w: 2, h: 0.5, placeholder: true},
+    { i: "exampleDocLink2", x: 11, y: 0, w: 2, h: 0.5, placeholder: true},
+    { i: "exampleSlideLink", x: 14, y: 0, w: 2, h: 0.5, placeholder: true },
+    { i: "exampleSheetLink", x: 17, y: 0, w: 2, h: 0.5, placeholder: true },
   ];
     
   return (
@@ -43,7 +43,17 @@ const ProjectBox: React.FC = () => {
           height: '5px',
           borderRight: '2px solid rgba(0, 0, 0, 0.4)',
           borderBottom: '2px solid rgba(0, 0, 0, 0.4)',
+        },
+        '.react-grid-item' : {
+          zIndex: 3,
+        },
+        '.react-grid-placeholder': {
+          background: 'red',
+          opacity: 0.2,
+          transitionDuration: '250ms',
+          zIndex: 2,
         }
+        
       }}/>
 
       <Box sx={{height:'620px', transform: 'translateZ(0px)', flexGrow: 1, border: '1px solid grey', borderRadius: 5}}>
@@ -72,7 +82,7 @@ const ProjectBox: React.FC = () => {
           </Card>
           <Box key='exampleDocLink1' 
           className="dragHandle" 
-          sx={{ p: 1, 
+          sx={{ 
             border: '1px dashed grey',     
             display: 'flex',
             flexDirection: 'column',
@@ -85,7 +95,7 @@ const ProjectBox: React.FC = () => {
           </Box>
           <Box key='exampleDocLink2' 
           className="dragHandle" 
-          sx={{ p: 1, 
+          sx={{ 
             border: '1px dashed grey',     
             display: 'flex',
             flexDirection: 'column',
@@ -98,7 +108,7 @@ const ProjectBox: React.FC = () => {
           </Box>
           <Box key='exampleSlideLink' 
           className="dragHandle" 
-          sx={{ p: 1, 
+          sx={{ 
             border: '1px dashed grey',     
             display: 'flex',
             flexDirection: 'column',
@@ -111,7 +121,7 @@ const ProjectBox: React.FC = () => {
           </Box>
           <Box key='exampleSheetLink' 
           className="dragHandle" 
-          sx={{ p: 1, 
+          sx={{ 
             border: '1px dashed grey',     
             display: 'flex',
             flexDirection: 'column',
