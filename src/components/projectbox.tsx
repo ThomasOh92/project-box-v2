@@ -81,7 +81,7 @@ const ProjectBox: React.FC = () => {
            }}
           >
             <DescriptionIcon sx={{fontSize: 40}}/>
-            <Link sx={{fontSize: 12, textAlign:'center'}} href="http://docs.google.com/" underline="hover">Google Doc Link</Link>
+            <Link sx={{fontSize: 12, textAlign:'center'}} href="http://docs.google.com/" underline="hover" target="_blank">Google Doc Link</Link>
           </Box>
           <Box key='exampleDocLink2' 
           className="dragHandle" 
@@ -94,7 +94,7 @@ const ProjectBox: React.FC = () => {
            }}
           >
             <DescriptionIcon sx={{fontSize: 40}}/>
-            <Link sx={{fontSize: 12, textAlign:'center'}} href="http://docs.google.com/" underline="hover">Other Google Doc</Link>
+            <Link sx={{fontSize: 12, textAlign:'center'}} href="http://docs.google.com/" underline="hover" target="_blank">Other Google Doc</Link>
           </Box>
           <Box key='exampleSlideLink' 
           className="dragHandle" 
@@ -107,7 +107,7 @@ const ProjectBox: React.FC = () => {
            }}
           >
             <CoPresentIcon sx={{fontSize: 40}}/>
-            <Link sx={{fontSize: 12, textAlign:'center'}} href="http://docs.google.com/" underline="hover">Presentation</Link>
+            <Link sx={{fontSize: 12, textAlign:'center'}} href="http://docs.google.com/" underline="hover" target="_blank">Presentation</Link>
           </Box>
           <Box key='exampleSheetLink' 
           className="dragHandle" 
@@ -120,7 +120,7 @@ const ProjectBox: React.FC = () => {
            }}
           >
             <GridOnIcon sx={{fontSize: 40}}/>
-            <Link sx={{fontSize: 12, textAlign:'center'}} href="http://docs.google.com/" underline="hover">Finances</Link>
+            <Link sx={{fontSize: 12, textAlign:'center'}} href="http://docs.google.com/" underline="hover" target="_blank">Finances</Link>
           </Box>
 
 
