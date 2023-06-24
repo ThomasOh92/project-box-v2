@@ -1,80 +1,40 @@
 import * as React from 'react';
 const { useState } = React;
 import { WidthProvider, Responsive, Layout } from 'react-grid-layout';
-import {Box, SpeedDial, SpeedDialIcon, SpeedDialAction, TextareaAutosize, ButtonBase, Typography, Link}  from '@mui/material';
-import { Card, CardHeader, CardContent } from '@mui/material';
-import FileCopyIcon from '@mui/icons-material/FileCopyOutlined';
-import { GlobalStyles } from '@mui/system';
+import {Box, SpeedDial, SpeedDialIcon, SpeedDialAction, TextareaAutosize}  from '@mui/material';
+import { Card, CardHeader, Link } from '@mui/material';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
 import DescriptionIcon from '@mui/icons-material/Description';
-import SlideshowIcon from '@mui/icons-material/Slideshow';
+import CoPresentIcon from '@mui/icons-material/CoPresent';
 import GridOnIcon from '@mui/icons-material/GridOn';
-import { SvgIconTypeMap } from '@mui/material/SvgIcon';
-import { OverridableComponent } from '@mui/material/OverridableComponent';
+import { GlobalStyles } from '@mui/system';
 
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
-
-interface LinkProps {
-  url: string;
-  title: string;
-  icon: OverridableComponent<SvgIconTypeMap<{}, "svg">>;
-  key: string;
-}
-
-const DraggableLinkCard: React.FC<LinkProps> = ({ title, icon: Icon, url, key }) => {
-  return (
-    <Card key={key} variant='outlined'>
-      <CardHeader className="dragHandle" sx={{ bgcolor: 'grey.200' }}/>
-      <CardContent>
-        <ButtonBase sx={{flexDirection: 'column' }}>
-          <Icon />
-          <Link href={url} underline="none">
-            <Typography>{title}</Typography>
-          </Link>
-        </ButtonBase>
-      </CardContent>
-    </Card>
-  );
-};
-
-
-
 
 const ProjectBox: React.FC = () => {
   
   const [noteContent, setNoteContent] = useState('Content...');
   const actions = [
-    { icon: <FileCopyIcon />, name: 'Copy' },
-    { icon: <FileCopyIcon />, name: 'Copy2' },
-    { icon: <FileCopyIcon />, name: 'Copy3' },
-    { icon: <FileCopyIcon />, name: 'Copy4' },
+    { icon: <DescriptionIcon />, name: 'Doc' },
+    { icon: <CoPresentIcon />, name: 'Slides' },
+    { icon: <GridOnIcon />, name: 'Spreadsheet' },
+    { icon: <FileCopyIcon />, name: '??' },
   ];
   const layout: Layout[] = [
     { i: "addButton", x: 40, y: 1.75, w: 2, h: 2, static: true, minW: 2, minH: 2},
     { i: "exampleStickyNote", x: 0, y: 0, w: 7, h: 2, minW: 2, minH: 0, resizeHandles: ['se']},
-    { i: "exampleDocLink1", x: 8, y: 0, w: 2, h: 2, },
-    { i: "exampleDocLink2", x: 12, y: 0, w: 2, h: 2 },
-    { i: "exampleSlideLink", x: 16, y: 0, w: 2, h: 2 },
-    { i: "exampleSheetLink", x: 20, y: 0, w: 2, h: 2 },
+    { i: "exampleDocLink1", x: 8, y: 0, w: 2, h: 0.5},
+    { i: "exampleDocLink2", x: 11, y: 0, w: 2, h: 0.5 },
+    { i: "exampleSlideLink", x: 14, y: 0, w: 2, h: 0.5 },
+    { i: "exampleSheetLink", x: 17, y: 0, w: 2, h: 0.5 },
   ];
     
   return (
     <>
       <GlobalStyles styles={{
-        '.react-resizable-handle': {
-          backgroundImage: 'none',
-          padding: '0',
-        },
-        '.react-grid-item > .react-resizable-handle.react-resizable-handle-n, .react-grid-item > .react-resizable-handle.react-resizable-handle-e, .react-grid-item > .react-resizable-handle.react-resizable-handle-s, .react-grid-item > .react-resizable-handle.react-resizable-handle-w, .react-grid-item > .react-resizable-handle.react-resizable-handle-ne, .react-grid-item > .react-resizable-handle.react-resizable-handle-nw, .react-grid-item > .react-resizable-handle.react-resizable-handle-se, .react-grid-item > .react-resizable-handle.react-resizable-handle-sw': {
-          transform: 'none',
-          margin: '0',
-          position: 'absolute',
-          width: '20px',
-          height: '20px',
-          right: '3px',
-          bottom: '3px',
-        },
-        '.react-grid-item > .react-resizable-handle::after': {
+
+        '.stickyNote > .react-resizable-handle::after': {
           content: '""',
           position: 'absolute',
           right: '3px',
@@ -94,7 +54,7 @@ const ProjectBox: React.FC = () => {
           cols={{lg: 40}} 
           compactType={null} 
           draggableHandle=".dragHandle">
-          <Card key='exampleStickyNote' variant='outlined' sx={{ display: 'flex', flexDirection: 'column' }}>
+          <Card key='exampleStickyNote' className="stickyNote" variant='outlined' sx={{ display: 'flex', flexDirection: 'column' }}>
             <CardHeader className="dragHandle" sx={{ bgcolor: 'grey.200' }}/>
             <Box sx={{ flex: 1, overflow: 'hidden', p: 2 }}>
               <TextareaAutosize
@@ -110,10 +70,59 @@ const ProjectBox: React.FC = () => {
               />
             </Box>
           </Card>
-          <DraggableLinkCard key='exampleDocLink1' title='Google Doc 1' icon={DescriptionIcon} url='https://docs.google.com/document/d/your-doc-id' />
-          <DraggableLinkCard key='exampleDocLink2' title='Google Doc 2' icon={DescriptionIcon} url='https://docs.google.com/presentation/d/your-slide-id' />
-          <DraggableLinkCard key='exampleSlideLink' title='Google Slide' icon={SlideshowIcon} url='https://docs.google.com/spreadsheets/d/your-sheet-id' />
-          <DraggableLinkCard key='exampleSheetLink' title='Google Sheet' icon={GridOnIcon} url='https://docs.google.com/spreadsheets/d/your-sheet-id' />
+          <Box key='exampleDocLink1' 
+          className="dragHandle" 
+          sx={{ p: 1, 
+            border: '1px dashed grey',     
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center'
+           }}
+          >
+            <DescriptionIcon sx={{fontSize: 40}}/>
+            <Link sx={{fontSize: 12, textAlign:'center'}} href="http://docs.google.com/" underline="hover">Google Doc Link</Link>
+          </Box>
+          <Box key='exampleDocLink2' 
+          className="dragHandle" 
+          sx={{ p: 1, 
+            border: '1px dashed grey',     
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center'
+           }}
+          >
+            <DescriptionIcon sx={{fontSize: 40}}/>
+            <Link sx={{fontSize: 12, textAlign:'center'}} href="http://docs.google.com/" underline="hover">Other Google Doc</Link>
+          </Box>
+          <Box key='exampleSlideLink' 
+          className="dragHandle" 
+          sx={{ p: 1, 
+            border: '1px dashed grey',     
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center'
+           }}
+          >
+            <CoPresentIcon sx={{fontSize: 40}}/>
+            <Link sx={{fontSize: 12, textAlign:'center'}} href="http://docs.google.com/" underline="hover">Presentation</Link>
+          </Box>
+          <Box key='exampleSheetLink' 
+          className="dragHandle" 
+          sx={{ p: 1, 
+            border: '1px dashed grey',     
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center'
+           }}
+          >
+            <GridOnIcon sx={{fontSize: 40}}/>
+            <Link sx={{fontSize: 12, textAlign:'center'}} href="http://docs.google.com/" underline="hover">Finances</Link>
+          </Box>
+
 
           <SpeedDial
             key="addButton"
