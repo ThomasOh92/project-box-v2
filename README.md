@@ -1,4 +1,4 @@
-# Current - Sprint 1 - Sticky note done. Working on file now
+# Current - Sprint 1 - Sticky note done and files done. Next step is to impleement drag effect
 
 ## Sprint 1 (starting pieces)
 ### 1. Add a set of initial starting elements (sticky note, file, weblink)
