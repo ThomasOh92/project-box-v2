@@ -3,10 +3,11 @@ const { useState } = React;
 import { WidthProvider, Responsive, Layout } from 'react-grid-layout';
 import {Box, SpeedDial, SpeedDialIcon, SpeedDialAction, TextareaAutosize}  from '@mui/material';
 import { Card, CardHeader, Link } from '@mui/material';
-import FileCopyIcon from '@mui/icons-material/FileCopy';
 import DescriptionIcon from '@mui/icons-material/Description';
 import CoPresentIcon from '@mui/icons-material/CoPresent';
 import GridOnIcon from '@mui/icons-material/GridOn';
+import LinkIcon from '@mui/icons-material/Link';
+import StickyNote2Icon from '@mui/icons-material/StickyNote2';
 import { GlobalStyles } from '@mui/system';
 
 
@@ -16,18 +17,19 @@ const ProjectBox: React.FC = () => {
   
   const [noteContent, setNoteContent] = useState('Content...');
   const actions = [
-    { icon: <DescriptionIcon />, name: 'Doc' },
-    { icon: <CoPresentIcon />, name: 'Slides' },
-    { icon: <GridOnIcon />, name: 'Spreadsheet' },
-    { icon: <FileCopyIcon />, name: '??' },
+    { icon: <DescriptionIcon />, name: 'Google Doc' },
+    { icon: <CoPresentIcon />, name: 'Google Slides' },
+    { icon: <GridOnIcon />, name: 'Google Sheet' },
+    { icon: <LinkIcon />, name: 'Link' },
+    { icon: <StickyNote2Icon />, name: 'Sticky Note' }
   ];
   const layout: Layout[] = [
-    { i: "addButton", x: 40, y: 1.75, w: 2, h: 2, static: true, minW: 2, minH: 2},
-    { i: "exampleStickyNote", x: 0, y: 0, w: 7, h: 2, minW: 2, minH: 0, resizeHandles: ['se'], placeholder: true},
-    { i: "exampleDocLink1", x: 8, y: 0, w: 2, h: 0.5, placeholder: true},
-    { i: "exampleDocLink2", x: 11, y: 0, w: 2, h: 0.5, placeholder: true},
-    { i: "exampleSlideLink", x: 14, y: 0, w: 2, h: 0.5, placeholder: true },
-    { i: "exampleSheetLink", x: 17, y: 0, w: 2, h: 0.5, placeholder: true },
+    { i: "addButton", x: 37.5, y: 0.7, w: 2, h: 3, static: true, minW: 2, minH: 2},
+    { i: "exampleStickyNote", x: 0, y: 0, w: 7, h: 2, minW: 2, minH: 0, resizeHandles: ['se']},
+    { i: "exampleDocLink1", x: 8, y: 0, w: 2, h: 0.5},
+    { i: "exampleDocLink2", x: 11, y: 0, w: 2, h: 0.5},
+    { i: "exampleSlideLink", x: 14, y: 0, w: 2, h: 0.5 },
+    { i: "exampleSheetLink", x: 17, y: 0, w: 2, h: 0.5},
   ];
     
   return (
@@ -46,6 +48,7 @@ const ProjectBox: React.FC = () => {
         },
         '.react-grid-item' : {
           zIndex: 3,
+          transition: 'all 400ms ease',
         },
         '.react-grid-placeholder': {
           background: 'red',
@@ -73,7 +76,7 @@ const ProjectBox: React.FC = () => {
                 minRows={3} 
                 style={{ width: '100%', height:'100%', border: 'none', 
                 fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-                fontSize: '1rem',
+                fontSize: '10',
                 outline: 'none',
                 resize: 'none'
                  }} 
