@@ -16,12 +16,35 @@ const ResponsiveReactGridLayout = WidthProvider(Responsive);
 const ProjectBox: React.FC = () => {
   
   const [noteContent, setNoteContent] = useState('Content...');
+
+  const [modalGoogleDocOpen, setModalGoogleDocOpen] = React.useState(false);
+  const handleModalOpenGoogleDoc = () => setModalGoogleDocOpen(true);
+  const handleModalCloseGoogleDoc = () => setModalGoogleDocOpen(false);
+
+  const [modalGoogleSlideOpen, setModalGoogleSlideOpen] = React.useState(false);
+  const handleModalOpenGoogleSlide = () => setModalGoogleSlideOpen(true);
+  const handleModalCloseGoogleSlide = () => setModalGoogleSlideOpen(false);
+
+  const [modalGoogleSheetOpen, setModalGoogleSheetOpen] = React.useState(false);
+  const handleModalOpenGoogleSheet = () => setModalGoogleSheetOpen(true);
+  const handleModalCloseGoogleSheet = () => setModalGoogleSheetOpen(false);
+
+  const [modalLinkOpen, setModalLinkOpen] = React.useState(false);
+  const handleModalOpenLink = () => setModalLinkOpen(true);
+  const handleModalCloseLink = () => setModalLinkOpen(false);
+
+  const [modalStickyNoteOpen, setModalStickyNoteOpen] = React.useState(false);
+  const handleModalOpenStickyNote = () => setModalStickyNoteOpen(true);
+  const handleModalCloseStickyNote = () => setModalStickyNoteOpen(false);
+
+
+
   const actions = [
-    { icon: <DescriptionIcon />, name: 'Google Doc' },
-    { icon: <CoPresentIcon />, name: 'Google Slides' },
-    { icon: <GridOnIcon />, name: 'Google Sheet' },
-    { icon: <LinkIcon />, name: 'Link' },
-    { icon: <StickyNote2Icon />, name: 'Sticky Note' }
+    { icon: <DescriptionIcon />, name: 'Google Doc', click: handleModalOpenGoogleDoc},
+    { icon: <CoPresentIcon />, name: 'Google Slides', click: handleModalOpenGoogleSlide },
+    { icon: <GridOnIcon />, name: 'Google Sheet', click: handleModalOpenGoogleSheet },
+    { icon: <LinkIcon />, name: 'Link', click: handleModalOpenLink },
+    { icon: <StickyNote2Icon />, name: 'Sticky Note', click: handleModalOpenStickyNote }
   ];
   const layout: Layout[] = [
     { i: "addButton", x: 37.5, y: 0.7, w: 2, h: 3, static: true, minW: 2, minH: 2},
@@ -147,6 +170,7 @@ const ProjectBox: React.FC = () => {
                 key={action.name}
                 icon={action.icon}
                 tooltipTitle={action.name}
+                onClick={action.click}
               />
             ))}
           </SpeedDial>
