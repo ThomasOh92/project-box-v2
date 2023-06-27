@@ -1,7 +1,7 @@
 import * as React from 'react';
 const { useState } = React;
 import { WidthProvider, Responsive, Layout } from 'react-grid-layout';
-import {Box, SpeedDial, SpeedDialIcon, SpeedDialAction, TextareaAutosize}  from '@mui/material';
+import {Box, SpeedDial, SpeedDialIcon, SpeedDialAction, TextareaAutosize, Button, TextField, Modal}  from '@mui/material';
 import { Card, CardHeader, Link } from '@mui/material';
 import DescriptionIcon from '@mui/icons-material/Description';
 import CoPresentIcon from '@mui/icons-material/CoPresent';
@@ -37,7 +37,21 @@ const ProjectBox: React.FC = () => {
   const handleModalOpenStickyNote = () => setModalStickyNoteOpen(true);
   const handleModalCloseStickyNote = () => setModalStickyNoteOpen(false);
 
+  const modalStyle = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+    display: 'flex',
+    flexDirection: 'column',
 
+  };
+  
 
   const actions = [
     { icon: <DescriptionIcon />, name: 'Google Doc', click: handleModalOpenGoogleDoc},
@@ -49,10 +63,10 @@ const ProjectBox: React.FC = () => {
   const layout: Layout[] = [
     { i: "addButton", x: 37.5, y: 0.7, w: 2, h: 3, static: true, minW: 2, minH: 2},
     { i: "exampleStickyNote", x: 0, y: 0, w: 7, h: 2, minW: 2, minH: 0, resizeHandles: ['se']},
-    { i: "exampleDocLink1", x: 8, y: 0, w: 2, h: 0.5},
-    { i: "exampleDocLink2", x: 11, y: 0, w: 2, h: 0.5},
-    { i: "exampleSlideLink", x: 14, y: 0, w: 2, h: 0.5 },
-    { i: "exampleSheetLink", x: 17, y: 0, w: 2, h: 0.5},
+    { i: "exampleDocLink1", x: 8, y: 0, w: 2, h: 0.5, minH: 0},
+    { i: "exampleDocLink2", x: 11, y: 0, w: 2, h: 0.5, minH: 0},
+    { i: "exampleSlideLink", x: 14, y: 0, w: 2, h: 0.5, minH: 0 },
+    { i: "exampleSheetLink", x: 17, y: 0, w: 2, h: 0.5, minH: 0},
   ];
     
   return (
@@ -175,6 +189,19 @@ const ProjectBox: React.FC = () => {
             ))}
           </SpeedDial>
         </ResponsiveReactGridLayout>
+        <Modal
+          open={modalGoogleDocOpen}
+          onClose={handleModalCloseGoogleDoc}
+          aria-labelledby="add google doc"
+          aria-describedby="modal for adding google doc to the layout"
+        >
+          <Box sx={modalStyle}>
+            <TextField id="googledoclink" label="Link to Google Doc" variant="standard" />
+            <Button sx={{marginTop: '10px', width: '50%',  alignSelf: 'center'}} variant='contained'>
+              Add
+            </Button>
+          </Box>
+        </Modal>
     </Box>
   </>
   );
