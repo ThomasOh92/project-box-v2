@@ -33,10 +33,6 @@ const ProjectBox: React.FC = () => {
   const handleModalOpenLink = () => setModalLinkOpen(true);
   const handleModalCloseLink = () => setModalLinkOpen(false);
 
-  const [modalStickyNoteOpen, setModalStickyNoteOpen] = React.useState(false);
-  const handleModalOpenStickyNote = () => setModalStickyNoteOpen(true);
-  const handleModalCloseStickyNote = () => setModalStickyNoteOpen(false);
-
   const modalStyle = {
     position: 'absolute' as 'absolute',
     top: '50%',
@@ -58,7 +54,7 @@ const ProjectBox: React.FC = () => {
     { icon: <CoPresentIcon />, name: 'Google Slides', click: handleModalOpenGoogleSlide },
     { icon: <GridOnIcon />, name: 'Google Sheet', click: handleModalOpenGoogleSheet },
     { icon: <LinkIcon />, name: 'Link', click: handleModalOpenLink },
-    { icon: <StickyNote2Icon />, name: 'Sticky Note', click: handleModalOpenStickyNote }
+    { icon: <StickyNote2Icon />, name: 'Sticky Note'}
   ];
   const layout: Layout[] = [
     { i: "addButton", x: 37.5, y: 0.7, w: 2, h: 3, static: true, minW: 2, minH: 2},
@@ -99,9 +95,9 @@ const ProjectBox: React.FC = () => {
       <Box sx={{height:'620px', transform: 'translateZ(0px)', flexGrow: 1, border: '1px solid grey', borderRadius: 5}}>
         <ResponsiveReactGridLayout 
           className="layout" 
-          layouts={{lg: layout}} 
-          breakpoints={{lg: 1200}} 
-          cols={{lg: 40}} 
+          layouts={{lg: layout, md: layout}} 
+          breakpoints={{lg: 1200, md:600}} 
+          cols={{lg: 40, md: 20}} 
           compactType={null} 
           draggableHandle=".dragHandle">
           <Card key='exampleStickyNote' className="stickyNote" variant='outlined' sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -197,6 +193,45 @@ const ProjectBox: React.FC = () => {
         >
           <Box sx={modalStyle}>
             <TextField id="googledoclink" label="Link to Google Doc" variant="standard" />
+            <Button sx={{marginTop: '10px', width: '50%',  alignSelf: 'center'}} variant='contained'>
+              Add
+            </Button>
+          </Box>
+        </Modal>
+        <Modal
+          open={modalGoogleSlideOpen}
+          onClose={handleModalCloseGoogleSlide}
+          aria-labelledby="add google doc"
+          aria-describedby="modal for adding google slide to the layout"
+        >
+          <Box sx={modalStyle}>
+            <TextField id="googleslidelink" label="Link to Google Slide" variant="standard" />
+            <Button sx={{marginTop: '10px', width: '50%',  alignSelf: 'center'}} variant='contained'>
+              Add
+            </Button>
+          </Box>
+        </Modal>
+        <Modal
+          open={modalGoogleSheetOpen}
+          onClose={handleModalCloseGoogleSheet}
+          aria-labelledby="add google sheet"
+          aria-describedby="modal for adding google sheet to the layout"
+        >
+          <Box sx={modalStyle}>
+            <TextField id="googlesheetlink" label="Link to Google Sheet" variant="standard" />
+            <Button sx={{marginTop: '10px', width: '50%',  alignSelf: 'center'}} variant='contained'>
+              Add
+            </Button>
+          </Box>
+        </Modal>
+        <Modal
+          open={modalLinkOpen}
+          onClose={handleModalCloseLink}
+          aria-labelledby="add link"
+          aria-describedby="modal for adding link to the layout"
+        >
+          <Box sx={modalStyle}>
+            <TextField id="link" label="Link" variant="standard" />
             <Button sx={{marginTop: '10px', width: '50%',  alignSelf: 'center'}} variant='contained'>
               Add
             </Button>
