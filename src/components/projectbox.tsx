@@ -48,7 +48,6 @@ const ProjectBox: React.FC = () => {
 
   };
   
-
   const actions = [
     { icon: <DescriptionIcon />, name: 'Google Doc', click: handleModalOpenGoogleDoc},
     { icon: <CoPresentIcon />, name: 'Google Slides', click: handleModalOpenGoogleSlide },
@@ -64,6 +63,33 @@ const ProjectBox: React.FC = () => {
     { i: "exampleSlideLink", x: 14, y: 0, w: 2, h: 0.5, minH: 0 },
     { i: "exampleSheetLink", x: 17, y: 0, w: 2, h: 0.5, minH: 0},
   ];
+
+  const [layouts, setLayouts] = useState({
+    lg: layout,
+    md: layout
+  });
+
+  const [googleDocLinks, setGoogleDocLinks] = useState<Record<string, string>>({});
+
+
+  const addGoogleDocLinkToLayout = (link: string) => {
+    const newKey = `googleDoc${Object.keys(googleDocLinks).length + 1}`;
+    const newLayoutItem = { i: newKey, x: 8, y: 0, w: 2, h: 0.5, minH: 0 };
+  
+    // Clone the current layouts and add the new item
+    const newLayouts = {
+      lg: [...layouts.lg, newLayoutItem],
+      md: [...layouts.md, newLayoutItem]
+    };
+  
+    // Clone the current links and add the new link
+    const newLinks = { ...googleDocLinks, [newKey]: link };
+  
+    setLayouts(newLayouts);
+    setGoogleDocLinks(newLinks);
+    handleModalCloseGoogleDoc();
+  };
+  
     
   return (
     <>
@@ -95,7 +121,7 @@ const ProjectBox: React.FC = () => {
       <Box sx={{height:'620px', transform: 'translateZ(0px)', flexGrow: 1, border: '1px solid grey', borderRadius: 5}}>
         <ResponsiveReactGridLayout 
           className="layout" 
-          layouts={{lg: layout, md: layout}} 
+          layouts={layouts} 
           breakpoints={{lg: 1200, md:600}} 
           cols={{lg: 40, md: 20}} 
           compactType={null} 
@@ -184,6 +210,34 @@ const ProjectBox: React.FC = () => {
               />
             ))}
           </SpeedDial>
+
+          {/* Google Doc components */}
+          {layouts.lg.map(layoutItem => {
+            // Check if the layout item key is in googleDocLinks
+            if (googleDocLinks[layoutItem.i]) {
+              return (
+                <Box key={layoutItem.i} 
+                className="dragHandle" 
+                sx={{ 
+                  border: '1px dashed grey',     
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
+                >
+                  <DescriptionIcon sx={{fontSize: 40}}/>
+                  <Link sx={{fontSize: 12, textAlign:'center'}} href={googleDocLinks[layoutItem.i]} underline="hover" target="_blank">Google Doc Link</Link>
+                </Box>
+              );
+            } else {
+              // Return null or some other component for non-Google Doc layout items
+              return null;
+            }
+          })}
+
+
+
         </ResponsiveReactGridLayout>
         <Modal
           open={modalGoogleDocOpen}
@@ -193,11 +247,12 @@ const ProjectBox: React.FC = () => {
         >
           <Box sx={modalStyle}>
             <TextField id="googledoclink" label="Link to Google Doc" variant="standard" />
-            <Button sx={{marginTop: '10px', width: '50%',  alignSelf: 'center'}} variant='contained'>
+            <Button sx={{marginTop: '10px', width: '50%',  alignSelf: 'center'}} variant='contained' onClick={() => addGoogleDocLinkToLayout(document.getElementById('googledoclink').value)}>
               Add
             </Button>
           </Box>
         </Modal>
+
         <Modal
           open={modalGoogleSlideOpen}
           onClose={handleModalCloseGoogleSlide}

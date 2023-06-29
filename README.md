@@ -1,4 +1,4 @@
-# Current - Sprint 2 Start! Step 2 now. Modals ready, functionality still needed
+# Current - Sprint 2 Start! Step 2 now. done for google doc. to replicate for others
 
 ~~ Sprint 1 (starting pieces)~~
 ~~ 1. Add a set of initial starting elements (sticky note, file, weblink)~~
