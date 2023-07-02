@@ -15,6 +15,7 @@ const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 const ProjectBox: React.FC = () => {
   
+  // States
   const [noteContent, setNoteContent] = useState('Content...');
 
   const [modalGoogleDocOpen, setModalGoogleDocOpen] = React.useState(false);
@@ -33,6 +34,13 @@ const ProjectBox: React.FC = () => {
   const handleModalOpenLink = () => setModalLinkOpen(true);
   const handleModalCloseLink = () => setModalLinkOpen(false);
 
+  const [googleDocLinks, setGoogleDocLinks] = useState<Record<string, string>>({});
+  const [googleSlideLinks, setGoogleSlideLinks] = useState<Record<string, string>>({});
+  const [googleSheetLinks, setGoogleSheetLinks] = useState<Record<string, string>>({});
+  const [webLinks, setWebLinks] = useState<Record<string, string>>({});
+  const [stickyNotes, setStickyNotes] = useState<Record<string, string>>({});
+
+
   const modalStyle = {
     position: 'absolute' as 'absolute',
     top: '50%',
@@ -47,38 +55,10 @@ const ProjectBox: React.FC = () => {
     flexDirection: 'column',
 
   };
-  
-  const actions = [
-    { icon: <DescriptionIcon />, name: 'Google Doc', click: handleModalOpenGoogleDoc},
-    { icon: <CoPresentIcon />, name: 'Google Slides', click: handleModalOpenGoogleSlide },
-    { icon: <GridOnIcon />, name: 'Google Sheet', click: handleModalOpenGoogleSheet },
-    { icon: <LinkIcon />, name: 'Link', click: handleModalOpenLink },
-    { icon: <StickyNote2Icon />, name: 'Sticky Note'}
-  ];
-  const layout: Layout[] = [
-    { i: "addButton", x: 37.5, y: 0.7, w: 2, h: 3, static: true, minW: 2, minH: 2},
-    { i: "exampleStickyNote", x: 0, y: 0, w: 7, h: 2, minW: 2, minH: 0, resizeHandles: ['se']},
-    { i: "exampleDocLink1", x: 8, y: 0, w: 2, h: 0.5, minH: 0},
-    { i: "exampleDocLink2", x: 11, y: 0, w: 2, h: 0.5, minH: 0},
-    { i: "exampleSlideLink", x: 14, y: 0, w: 2, h: 0.5, minH: 0 },
-    { i: "exampleSheetLink", x: 17, y: 0, w: 2, h: 0.5, minH: 0},
-  ];
-
-  const [layouts, setLayouts] = useState({
-    lg: layout,
-    md: layout
-  });
-
-  const [googleDocLinks, setGoogleDocLinks] = useState<Record<string, string>>({});
-  const [googleSlideLinks, setGoogleSlideLinks] = useState<Record<string, string>>({});
-  const [googleSheetLinks, setGoogleSheetLinks] = useState<Record<string, string>>({});
-  const [webLinks, setWebLinks] = useState<Record<string, string>>({});
-
-
 
   const addGoogleDocLinkToLayout = (link: string) => {
     const newKey = `googleDoc${Object.keys(googleDocLinks).length + 1}`;
-    const newLayoutItem = { i: newKey, x: 0, y: 0, w: 2, h: 0.5, minH: 0 };
+    const newLayoutItem = { i: newKey, x: 0, y: 0, w: 2, h: 0.4, minH: 0 };
   
     // Clone the current layouts and add the new item
     const newLayouts = {
@@ -95,8 +75,8 @@ const ProjectBox: React.FC = () => {
   };
 
   const addGoogleSlideLinkToLayout = (link: string) => {
-    const newKey = `googleSlide${Object.keys(googleDocLinks).length + 1}`;
-    const newLayoutItem = { i: newKey, x: 11, y: 0, w: 2, h: 0.5, minH: 0 };
+    const newKey = `googleSlide${Object.keys(googleSlideLinks).length + 1}`;
+    const newLayoutItem = { i: newKey, x: 11, y: 0, w: 2, h: 0.4, minH: 0 };
   
     // Clone the current layouts and add the new item
     const newLayouts = {
@@ -113,8 +93,8 @@ const ProjectBox: React.FC = () => {
   };
 
   const addGoogleSheetLinkToLayout = (link: string) => {
-    const newKey = `googleSheet${Object.keys(googleDocLinks).length + 1}`;
-    const newLayoutItem = { i: newKey, x: 14, y: 0, w: 2, h: 0.5, minH: 0 };
+    const newKey = `googleSheet${Object.keys(googleSheetLinks).length + 1}`;
+    const newLayoutItem = { i: newKey, x: 14, y: 0, w: 2, h: 0.4, minH: 0 };
   
     // Clone the current layouts and add the new item
     const newLayouts = {
@@ -131,8 +111,8 @@ const ProjectBox: React.FC = () => {
   };
    
   const addWebLinkToLayout = (link: string) => {
-    const newKey = `webLink${Object.keys(googleDocLinks).length + 1}`;
-    const newLayoutItem = { i: newKey, x: 17, y: 0, w: 2, h: 0.5, minH: 0 };
+    const newKey = `webLink${Object.keys(webLinks).length + 1}`;
+    const newLayoutItem = { i: newKey, x: 17, y: 0, w: 2, h: 0.4, minH: 0 };
   
     // Clone the current layouts and add the new item
     const newLayouts = {
@@ -148,11 +128,51 @@ const ProjectBox: React.FC = () => {
     handleModalCloseLink();
   };
 
+  const addStickyNote = () => {
+    const newKey = `stickyNote${Object.keys(stickyNotes).length + 1}`;
+    const newLayoutItem = { i: newKey, x: 0, y: 0, w: 7, h: 1, minH: 0 };
   
+    // Clone the current layouts and add the new item
+    const newLayouts = {
+      lg: [...layouts.lg, newLayoutItem],
+      md: [...layouts.md, newLayoutItem]
+    };
+  
+    // Clone the current sticky notes and add the new content
+    const newStickyNotes = { ...stickyNotes, [newKey]:''};
+
+    setLayouts(newLayouts);
+    setStickyNotes(newStickyNotes);
+
+    console.log("adding sticky note")
+  
+  }
+  
+  const actions = [
+    { icon: <DescriptionIcon />, name: 'Google Doc', click: handleModalOpenGoogleDoc},
+    { icon: <CoPresentIcon />, name: 'Google Slides', click: handleModalOpenGoogleSlide },
+    { icon: <GridOnIcon />, name: 'Google Sheet', click: handleModalOpenGoogleSheet },
+    { icon: <LinkIcon />, name: 'Link', click: handleModalOpenLink },
+    { icon: <StickyNote2Icon />, name: 'Sticky Note', click: addStickyNote}
+  ];
+
+  const layout: Layout[] = [
+    { i: "addButton", x: 37.5, y: 0.7, w: 2, h: 3, static: true, minW: 2, minH: 2},
+    { i: "exampleStickyNote", x: 0, y: 0, w: 7, h: 1, minW: 2, minH: 0, resizeHandles: ['se']},
+    { i: "exampleDocLink1", x: 7, y: 0, w: 2, h: 0.4, minH: 0},
+    { i: "exampleDocLink2", x: 9, y: 0, w: 2, h: 0.4, minH: 0},
+    { i: "exampleSlideLink", x: 11, y: 0, w: 2, h: 0.4, minH: 0 },
+    { i: "exampleSheetLink", x: 13, y: 0, w: 2, h: 0.4, minH: 0},
+  ];
+
+  const [layouts, setLayouts] = useState({
+    lg: layout,
+    md: layout
+  });
+
   return (
     <>
       <GlobalStyles styles={{
-
         '.stickyNote > .react-resizable-handle::after': {
           content: '""',
           position: 'absolute',
@@ -165,7 +185,7 @@ const ProjectBox: React.FC = () => {
         },
         '.react-grid-item' : {
           zIndex: 3,
-          transition: 'all 400ms ease',
+          transition: 'all 200ms ease',
         },
         '.react-grid-placeholder': {
           background: 'red',
@@ -187,7 +207,7 @@ const ProjectBox: React.FC = () => {
 
           {/* Example components */}
           <Card key='exampleStickyNote' className="stickyNote" variant='outlined' sx={{ display: 'flex', flexDirection: 'column' }}>
-            <CardHeader className="dragHandle" sx={{ bgcolor: 'grey.200' }}/>
+            <CardHeader className="dragHandle" sx={{ bgcolor: 'grey.200', padding: '10px' }}/>
             <Box sx={{ flex: 1, overflow: 'hidden', p: 2 }}>
               <TextareaAutosize
                 value={noteContent}
@@ -205,53 +225,49 @@ const ProjectBox: React.FC = () => {
           <Box key='exampleDocLink1' 
           className="dragHandle" 
           sx={{ 
-            border: '1px dashed grey',     
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center'
            }}
           >
-            <DescriptionIcon sx={{fontSize: 40}}/>
-            <Link sx={{fontSize: 12, textAlign:'center'}} href="http://docs.google.com/" underline="hover" target="_blank">Google Doc Link</Link>
+            <DescriptionIcon sx={{fontSize: 40, paddingBottom: '5px'}}/>
+            <Link sx={{fontSize: 12, textAlign:'center'}} href="http://docs.google.com/" underline="hover" target="_blank">Overall Plan</Link>
           </Box>
           <Box key='exampleDocLink2' 
           className="dragHandle" 
           sx={{ 
-            border: '1px dashed grey',     
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center'
            }}
           >
-            <DescriptionIcon sx={{fontSize: 40}}/>
-            <Link sx={{fontSize: 12, textAlign:'center'}} href="http://docs.google.com/" underline="hover" target="_blank">Other Google Doc</Link>
+            <DescriptionIcon sx={{fontSize: 40, paddingBottom: '5px'}}/>
+            <Link sx={{fontSize: 12, textAlign:'center'}} href="http://docs.google.com/" underline="hover" target="_blank">References</Link>
           </Box>
           <Box key='exampleSlideLink' 
           className="dragHandle" 
           sx={{ 
-            border: '1px dashed grey',     
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center'
            }}
           >
-            <CoPresentIcon sx={{fontSize: 40}}/>
+            <CoPresentIcon sx={{fontSize: 40, paddingBottom: '5px'}}/>
             <Link sx={{fontSize: 12, textAlign:'center'}} href="http://docs.google.com/" underline="hover" target="_blank">Presentation</Link>
           </Box>
           <Box key='exampleSheetLink' 
           className="dragHandle" 
           sx={{ 
-            border: '1px dashed grey',     
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center'
            }}
           >
-            <GridOnIcon sx={{fontSize: 40}}/>
+            <GridOnIcon sx={{fontSize: 40, paddingBottom: '5px'}}/>
             <Link sx={{fontSize: 12, textAlign:'center'}} href="http://docs.google.com/" underline="hover" target="_blank">Finances</Link>
           </Box>
 
@@ -279,14 +295,13 @@ const ProjectBox: React.FC = () => {
                 <Box key={layoutItem.i} 
                 className="dragHandle" 
                 sx={{ 
-                  border: '1px dashed grey',     
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'center',
                   alignItems: 'center'
                 }}
                 >
-                  <DescriptionIcon sx={{fontSize: 40}}/>
+                  <DescriptionIcon sx={{fontSize: 40, paddingBottom: '5px'}}/>
                   <Link sx={{fontSize: 12, textAlign:'center'}} href={googleDocLinks[layoutItem.i]} underline="hover" target="_blank">Google Doc Link</Link>
                 </Box>
               );
@@ -304,14 +319,13 @@ const ProjectBox: React.FC = () => {
                 <Box key={layoutItem.i} 
                 className="dragHandle" 
                 sx={{ 
-                  border: '1px dashed grey',     
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'center',
                   alignItems: 'center'
                 }}
                 >
-                  <CoPresentIcon sx={{fontSize: 40}}/>
+                  <CoPresentIcon sx={{fontSize: 40, paddingBottom: '5px'}}/>
                   <Link sx={{fontSize: 12, textAlign:'center'}} href={googleSlideLinks[layoutItem.i]} underline="hover" target="_blank">Google Slide Link</Link>
                 </Box>
               );
@@ -329,14 +343,13 @@ const ProjectBox: React.FC = () => {
                 <Box key={layoutItem.i} 
                 className="dragHandle" 
                 sx={{ 
-                  border: '1px dashed grey',     
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'center',
                   alignItems: 'center'
                 }}
                 >
-                  <GridOnIcon sx={{fontSize: 40}}/>
+                  <GridOnIcon sx={{fontSize: 40, paddingBottom: '5px'}}/>
                   <Link sx={{fontSize: 12, textAlign:'center'}} href={googleSheetLinks[layoutItem.i]} underline="hover" target="_blank">Google Sheet Link</Link>
                 </Box>
               );
@@ -354,14 +367,13 @@ const ProjectBox: React.FC = () => {
                 <Box key={layoutItem.i} 
                 className="dragHandle" 
                 sx={{ 
-                  border: '1px dashed grey',     
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'center',
                   alignItems: 'center'
                 }}
                 >
-                  <LinkIcon sx={{fontSize: 40}}/>
+                  <LinkIcon sx={{fontSize: 40, paddingBottom: '5px'}}/>
                   <Link sx={{fontSize: 12, textAlign:'center'}} href={webLinks[layoutItem.i]} underline="hover" target="_blank">Web Link</Link>
                 </Box>
               );
@@ -369,6 +381,31 @@ const ProjectBox: React.FC = () => {
               // Return null or some other component for non-Web link layout items
               return null;
             }
+          })}
+
+          {/* Sticky note components */}
+          {Object.keys(stickyNotes).map((key) => {
+            return (
+              <Card key={key} className="stickyNote" variant='outlined' sx={{ display: 'flex', flexDirection: 'column' }}>
+                <CardHeader className="dragHandle" sx={{ bgcolor: 'grey.200', padding: '10px' }}/>
+                <Box sx={{ flex: 1, overflow: 'hidden', p: 2 }}>
+                  <TextareaAutosize
+                    value="Content..."
+                    onChange={(event) => {
+                      const updatedStickyNotes = { ...stickyNotes, [key]: event.target.value };
+                      setStickyNotes(updatedStickyNotes);
+                    }}
+                    minRows={3} 
+                    style={{ width: '100%', height:'100%', border: 'none', 
+                    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+                    fontSize: '10',
+                    outline: 'none',
+                    resize: 'none'
+                    }} 
+                  />
+                </Box>
+              </Card>
+             );
           })}
 
         </ResponsiveReactGridLayout>
