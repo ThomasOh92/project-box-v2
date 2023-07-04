@@ -2,6 +2,7 @@
 ## - Adding the ability to name your links? or we could just simulate it for the demo
 ## - Controlling the box boundaries
 ## - Sorting out the header area (delete? editable?)
+## - dark mode?
 
 ### Note: Remember the real value of this is about simplicity and instant usability. Miro and the other products are too fully featured
 ### Notes about the value :

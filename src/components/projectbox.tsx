@@ -16,8 +16,6 @@ const ResponsiveReactGridLayout = WidthProvider(Responsive);
 const ProjectBox: React.FC = () => {
   
   // States
-  const [noteContent, setNoteContent] = useState('Content...');
-
   const [modalGoogleDocOpen, setModalGoogleDocOpen] = React.useState(false);
   const handleModalOpenGoogleDoc = () => setModalGoogleDocOpen(true);
   const handleModalCloseGoogleDoc = () => setModalGoogleDocOpen(false);
@@ -210,8 +208,7 @@ const ProjectBox: React.FC = () => {
             <CardHeader className="dragHandle" sx={{ bgcolor: 'grey.200', padding: '10px' }}/>
             <Box sx={{ flex: 1, overflow: 'hidden', p: 2 }}>
               <TextareaAutosize
-                value={noteContent}
-                onChange={(event) => setNoteContent(event.target.value)}
+                defaultValue="Content..."
                 minRows={3} 
                 style={{ width: '100%', height:'100%', border: 'none', 
                 fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
@@ -390,7 +387,7 @@ const ProjectBox: React.FC = () => {
                 <CardHeader className="dragHandle" sx={{ bgcolor: 'grey.200', padding: '10px' }}/>
                 <Box sx={{ flex: 1, overflow: 'hidden', p: 2 }}>
                   <TextareaAutosize
-                    value="Content..."
+                    defaultValue="Content..."
                     onChange={(event) => {
                       const updatedStickyNotes = { ...stickyNotes, [key]: event.target.value };
                       setStickyNotes(updatedStickyNotes);
