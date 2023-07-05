@@ -8,6 +8,11 @@ import CoPresentIcon from '@mui/icons-material/CoPresent';
 import GridOnIcon from '@mui/icons-material/GridOn';
 import LinkIcon from '@mui/icons-material/Link';
 import StickyNote2Icon from '@mui/icons-material/StickyNote2';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
 import { GlobalStyles } from '@mui/system';
 
 
@@ -155,7 +160,7 @@ const ProjectBox: React.FC = () => {
   ];
 
   const layout: Layout[] = [
-    { i: "addButton", x: 37.5, y: 0.7, w: 2, h: 3, static: true, minW: 2, minH: 0},
+    { i: "addButton", x: 38, y: 0.8, w: 2, h: 3, static: true, minW: 2, minH: 0},
     { i: "exampleStickyNote", x: 0, y: 0, w: 7, h: 1, minW: 2, minH: 0, resizeHandles: ['se']},
     { i: "exampleDocLink1", x: 7, y: 0, w: 2, h: 0.4, minH: 0},
     { i: "exampleDocLink2", x: 9, y: 0, w: 2, h: 0.4, minH: 0},
@@ -186,15 +191,31 @@ const ProjectBox: React.FC = () => {
           transition: 'all 200ms ease',
         },
         '.react-grid-placeholder': {
-          background: 'red',
+          background: 'rgba(0, 0, 0, 0.54)',
           opacity: 0.2,
+          borderRadius: '5px',
           transitionDuration: '250ms',
           zIndex: 2,
         }
         
       }}/>
+        <AppBar position="static" sx={{ flexGrow: 1, backgroundColor: "#eee", margin: '10px', borderRadius: '5px', width: 'inherit'}}>
+          <Toolbar>
+            <IconButton
+              size="large"
+              edge="start"
+              aria-label="menu"
+              sx={{ mr: 2 }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'rgba(0, 0, 0, 0.54)' }}>
+              Project Box
+            </Typography>
+          </Toolbar>
+        </AppBar>
 
-      <Box sx={{height:'620px', transform: 'translateZ(0px)', flexGrow: 1, backgroundColor: "#eee", margin: '10px'}}>
+      <Box sx={{height:'620px', transform: 'translateZ(0px)', flexGrow: 1, backgroundColor: "#eee", margin: '10px', borderRadius: '5px', boxShadow: "0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)"}}>
         <ResponsiveReactGridLayout 
           className="layout" 
           layouts={layouts} 
@@ -205,7 +226,7 @@ const ProjectBox: React.FC = () => {
           isBounded={true} >
 
           {/* Example components */}
-          <Card key='exampleStickyNote' className="stickyNote" variant='outlined' sx={{ display: 'flex', flexDirection: 'column', '&:hover': {borderColor: 'primary.dark'}, }}>
+          <Card key='exampleStickyNote' className="stickyNote" variant='outlined' sx={{ display: 'flex', flexDirection: 'column', '&:hover': {border: '1px dotted', borderColor: 'primary.dark', borderRadius: '5px'}, }}>
             <CardHeader className="dragHandle" sx={{ bgcolor: 'grey.300', padding: '10px' }}/>
             <Box sx={{ flex: 1, overflow: 'hidden', p: 2 }}>
               <TextareaAutosize
@@ -227,7 +248,7 @@ const ProjectBox: React.FC = () => {
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            '&:hover': { borderColor: 'primary.dark'},
+            '&:hover': { border: '1px dotted', borderColor: 'primary.dark', borderRadius: '5px'},
            }}
           >
             <DescriptionIcon sx={{fontSize: 40, paddingBottom: '5px'}}/>
@@ -239,7 +260,8 @@ const ProjectBox: React.FC = () => {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
-            alignItems: 'center'
+            alignItems: 'center',
+            '&:hover': { border: '1px dotted', borderColor: 'primary.dark', borderRadius: '5px'},
            }}
           >
             <DescriptionIcon sx={{fontSize: 40, paddingBottom: '5px'}}/>
@@ -251,7 +273,8 @@ const ProjectBox: React.FC = () => {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
-            alignItems: 'center'
+            alignItems: 'center',
+            '&:hover': { border: '1px dotted', borderColor: 'primary.dark', borderRadius: '5px'},
            }}
           >
             <CoPresentIcon sx={{fontSize: 40, paddingBottom: '5px'}}/>
@@ -263,7 +286,8 @@ const ProjectBox: React.FC = () => {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
-            alignItems: 'center'
+            alignItems: 'center',
+            '&:hover': { border: '1px dotted', borderColor: 'primary.dark', borderRadius: '5px'},
            }}
           >
             <GridOnIcon sx={{fontSize: 40, paddingBottom: '5px'}}/>
@@ -297,7 +321,8 @@ const ProjectBox: React.FC = () => {
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'center',
-                  alignItems: 'center'
+                  alignItems: 'center',
+                  '&:hover': { border: '1px dotted', borderColor: 'primary.dark', borderRadius: '5px'}
                 }}
                 >
                   <DescriptionIcon sx={{fontSize: 40, paddingBottom: '5px'}}/>
@@ -321,7 +346,8 @@ const ProjectBox: React.FC = () => {
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'center',
-                  alignItems: 'center'
+                  alignItems: 'center',
+                  '&:hover': { border: '1px dotted', borderColor: 'primary.dark', borderRadius: '5px'}
                 }}
                 >
                   <CoPresentIcon sx={{fontSize: 40, paddingBottom: '5px'}}/>
@@ -345,7 +371,8 @@ const ProjectBox: React.FC = () => {
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'center',
-                  alignItems: 'center'
+                  alignItems: 'center',
+                  '&:hover': { border: '1px dotted', borderColor: 'primary.dark', borderRadius: '5px'}
                 }}
                 >
                   <GridOnIcon sx={{fontSize: 40, paddingBottom: '5px'}}/>
@@ -369,7 +396,8 @@ const ProjectBox: React.FC = () => {
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'center',
-                  alignItems: 'center'
+                  alignItems: 'center',
+                  '&:hover': { border: '1px dotted', borderColor: 'primary.dark', borderRadius: '5px'}
                 }}
                 >
                   <LinkIcon sx={{fontSize: 40, paddingBottom: '5px'}}/>
@@ -385,7 +413,7 @@ const ProjectBox: React.FC = () => {
           {/* Sticky note components */}
           {Object.keys(stickyNotes).map((key) => {
             return (
-              <Card key={key} className="stickyNote" variant='outlined' sx={{ display: 'flex', flexDirection: 'column' }}>
+              <Card key={key} className="stickyNote" variant='outlined' sx={{ display: 'flex', flexDirection: 'column', '&:hover': { border: '1px dotted', borderColor: 'primary.dark', borderRadius: '5px'}}}>
                 <CardHeader className="dragHandle" sx={{ bgcolor: 'grey.200', padding: '10px' }}/>
                 <Box sx={{ flex: 1, overflow: 'hidden', p: 2 }}>
                   <TextareaAutosize
