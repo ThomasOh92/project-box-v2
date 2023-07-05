@@ -155,7 +155,7 @@ const ProjectBox: React.FC = () => {
   ];
 
   const layout: Layout[] = [
-    { i: "addButton", x: 37.5, y: 0.7, w: 2, h: 3, static: true, minW: 2, minH: 2},
+    { i: "addButton", x: 37.5, y: 0.7, w: 2, h: 3, static: true, minW: 2, minH: 0},
     { i: "exampleStickyNote", x: 0, y: 0, w: 7, h: 1, minW: 2, minH: 0, resizeHandles: ['se']},
     { i: "exampleDocLink1", x: 7, y: 0, w: 2, h: 0.4, minH: 0},
     { i: "exampleDocLink2", x: 9, y: 0, w: 2, h: 0.4, minH: 0},
@@ -194,18 +194,19 @@ const ProjectBox: React.FC = () => {
         
       }}/>
 
-      <Box sx={{height:'620px', transform: 'translateZ(0px)', flexGrow: 1, border: '1px solid grey', borderRadius: 5}}>
+      <Box sx={{height:'620px', transform: 'translateZ(0px)', flexGrow: 1, backgroundColor: "#eee", margin: '10px'}}>
         <ResponsiveReactGridLayout 
           className="layout" 
           layouts={layouts} 
           breakpoints={{lg: 1200, md:600}} 
           cols={{lg: 40, md: 20}} 
           compactType={null} 
-          draggableHandle=".dragHandle">
+          draggableHandle=".dragHandle"
+          isBounded={true} >
 
           {/* Example components */}
-          <Card key='exampleStickyNote' className="stickyNote" variant='outlined' sx={{ display: 'flex', flexDirection: 'column' }}>
-            <CardHeader className="dragHandle" sx={{ bgcolor: 'grey.200', padding: '10px' }}/>
+          <Card key='exampleStickyNote' className="stickyNote" variant='outlined' sx={{ display: 'flex', flexDirection: 'column', '&:hover': {borderColor: 'primary.dark'}, }}>
+            <CardHeader className="dragHandle" sx={{ bgcolor: 'grey.300', padding: '10px' }}/>
             <Box sx={{ flex: 1, overflow: 'hidden', p: 2 }}>
               <TextareaAutosize
                 defaultValue="Content..."
@@ -225,7 +226,8 @@ const ProjectBox: React.FC = () => {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
-            alignItems: 'center'
+            alignItems: 'center',
+            '&:hover': { borderColor: 'primary.dark'},
            }}
           >
             <DescriptionIcon sx={{fontSize: 40, paddingBottom: '5px'}}/>
@@ -415,8 +417,9 @@ const ProjectBox: React.FC = () => {
           aria-describedby="modal for adding google doc to the layout"
         >
           <Box sx={modalStyle}>
-            <TextField id="googledoclink" label="Link to Google Doc" variant="standard" />
-            <Button sx={{marginTop: '10px', width: '50%',  alignSelf: 'center'}} variant='contained' onClick={() => addGoogleDocLinkToLayout(document.getElementById('googledoclink').value)}>
+            <TextField id="title" label="Title" sx={{paddingBottom: '10px'}} />
+            <TextField id="googledoclink" label="Link to Google Doc" rows={4} multiline />
+            <Button sx={{marginTop: '10px', width: '10%',  alignSelf: 'center'}} variant='contained' onClick={() => addGoogleDocLinkToLayout(document.getElementById('googledoclink').value)}>
               Add
             </Button>
           </Box>
@@ -428,8 +431,9 @@ const ProjectBox: React.FC = () => {
           aria-describedby="modal for adding google slide to the layout"
         >
           <Box sx={modalStyle}>
-            <TextField id="googleslidelink" label="Link to Google Slide" variant="standard" />
-            <Button sx={{marginTop: '10px', width: '50%',  alignSelf: 'center'}} variant='contained' onClick={() => addGoogleSlideLinkToLayout(document.getElementById('googleslidelink').value)}>
+            <TextField id="title" label="Title" sx={{paddingBottom: '10px'}} />
+            <TextField id="googleslidelink" label="Link to Google Slide" rows={4} multiline />
+            <Button sx={{marginTop: '10px', width: '10%',  alignSelf: 'center'}} variant='contained' onClick={() => addGoogleSlideLinkToLayout(document.getElementById('googleslidelink').value)}>
               Add
             </Button>
           </Box>
@@ -441,8 +445,9 @@ const ProjectBox: React.FC = () => {
           aria-describedby="modal for adding google sheet to the layout"
         >
           <Box sx={modalStyle}>
-            <TextField id="googlesheetlink" label="Link to Google Sheet" variant="standard" />
-            <Button sx={{marginTop: '10px', width: '50%',  alignSelf: 'center'}} variant='contained' onClick={() => addGoogleSheetLinkToLayout(document.getElementById('googlesheetlink').value)}>
+            <TextField id="title" label="Title" sx={{paddingBottom: '10px'}} />
+            <TextField id="googlesheetlink" label="Link to Google Sheet"  rows={4} multiline />
+            <Button sx={{marginTop: '10px', width: '10%',  alignSelf: 'center'}} variant='contained' onClick={() => addGoogleSheetLinkToLayout(document.getElementById('googlesheetlink').value)}>
               Add
             </Button>
           </Box>
@@ -454,8 +459,9 @@ const ProjectBox: React.FC = () => {
           aria-describedby="modal for adding web link to the layout"
         >
           <Box sx={modalStyle}>
-            <TextField id="weblink" label="Link" variant="standard" />
-            <Button sx={{marginTop: '10px', width: '50%',  alignSelf: 'center'}} variant='contained' onClick={() => addWebLinkToLayout(document.getElementById('weblink').value)}>
+            <TextField id="title" label="Title" sx={{paddingBottom: '10px'}} />
+            <TextField id="weblink" label="Link" rows={4} multiline  />
+            <Button sx={{marginTop: '10px', width: '10%',  alignSelf: 'center'}} variant='contained' onClick={() => addWebLinkToLayout(document.getElementById('weblink').value)}>
               Add
             </Button>
           </Box>
