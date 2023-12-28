@@ -1,18 +1,14 @@
 import * as React from 'react';
 const { useState } = React;
 import { WidthProvider, Responsive, Layout } from 'react-grid-layout';
-import {Box, SpeedDial, SpeedDialIcon, SpeedDialAction, TextareaAutosize, Button, TextField, Modal}  from '@mui/material';
+import {Box, TextareaAutosize, Button, TextField, Modal}  from '@mui/material';
 import { Card, CardHeader, Link } from '@mui/material';
 import DescriptionIcon from '@mui/icons-material/Description';
 import CoPresentIcon from '@mui/icons-material/CoPresent';
 import GridOnIcon from '@mui/icons-material/GridOn';
 import LinkIcon from '@mui/icons-material/Link';
-import StickyNote2Icon from '@mui/icons-material/StickyNote2';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import { GlobalStyles } from '@mui/system';
 
 
@@ -20,30 +16,34 @@ const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 const ProjectBox: React.FC = () => {
   
-  // States
-  const [modalGoogleDocOpen, setModalGoogleDocOpen] = React.useState(false);
-  const handleModalOpenGoogleDoc = () => setModalGoogleDocOpen(true);
-  const handleModalCloseGoogleDoc = () => setModalGoogleDocOpen(false);
+  // State to open modal to add documents
+  const [modalDocOpen, setModalDocOpen] = React.useState(false);
+  const handleModalOpenDoc = () => {
+    setModalDocOpen(true);
+    handleCloseRightClick();
+  };
+  const handleModalCloseDoc = () => setModalDocOpen(false);
 
-  const [modalGoogleSlideOpen, setModalGoogleSlideOpen] = React.useState(false);
-  const handleModalOpenGoogleSlide = () => setModalGoogleSlideOpen(true);
-  const handleModalCloseGoogleSlide = () => setModalGoogleSlideOpen(false);
-
-  const [modalGoogleSheetOpen, setModalGoogleSheetOpen] = React.useState(false);
-  const handleModalOpenGoogleSheet = () => setModalGoogleSheetOpen(true);
-  const handleModalCloseGoogleSheet = () => setModalGoogleSheetOpen(false);
-
+  // State to open modal to add links
   const [modalLinkOpen, setModalLinkOpen] = React.useState(false);
-  const handleModalOpenLink = () => setModalLinkOpen(true);
+  const handleModalOpenLink = () => {
+    setModalLinkOpen(true);
+    handleCloseRightClick();
+  }
   const handleModalCloseLink = () => setModalLinkOpen(false);
 
-  const [googleDocLinks, setGoogleDocLinks] = useState<Record<string, string>>({});
-  const [googleSlideLinks, setGoogleSlideLinks] = useState<Record<string, string>>({});
-  const [googleSheetLinks, setGoogleSheetLinks] = useState<Record<string, string>>({});
+  // State to open menu on right click
+  const [contextMenu, setContextMenu] = useState<{
+    mouseX: number;
+    mouseY: number;
+  } | null>(null);
+
+  // States for adding new docs, links or sticky note
+  const [docLinks, setDocLinks] = useState<Record<string, string>>({});
   const [webLinks, setWebLinks] = useState<Record<string, string>>({});
   const [stickyNotes, setStickyNotes] = useState<Record<string, string>>({});
 
-
+  // Modal Style to import
   const modalStyle = {
     position: 'absolute' as 'absolute',
     top: '50%',
@@ -59,8 +59,46 @@ const ProjectBox: React.FC = () => {
 
   };
 
-  const addGoogleDocLinkToLayout = (link: string) => {
-    const newKey = `googleDoc${Object.keys(googleDocLinks).length + 1}`;
+  // Functions
+
+  const handleRightClick = (event: React.MouseEvent) => {
+    event.preventDefault();
+    console.log("Right-clicked"); // Debugging line
+    setContextMenu({
+      mouseX: event.clientX - 2,
+      mouseY: event.clientY + 4,
+    });
+    console.log(contextMenu)
+  };
+
+  const handleCloseRightClick = () => {
+    setContextMenu(null);
+  };
+
+  const truncateURL = (url: string): string => {
+    // Remove the http:// or https:// part
+    const cleanedUrl = url.replace(/(^\w+:|^)\/\//, '');
+
+    // Truncate to 12 characters
+    if (cleanedUrl.length <= 12) {
+      return cleanedUrl;
+    }
+
+    // Extract the domain and the rest of the URL
+    const domainMatch = cleanedUrl.match(/[^\/?#]+(?=\/|$|\?|#)/);
+    const domain = domainMatch ? domainMatch[0] : '';
+    const rest = cleanedUrl.substring(domain.length);
+
+    if (domain.length >= 12) {
+      return domain.substring(0, 12); // If the domain itself is too long, truncate it
+    }
+
+    // Try to include as much as possible from the rest of the URL
+    return domain + rest.substring(0, 12 - domain.length);
+  };
+  
+  const addDoctoLayOut = (link: string) => {
+    const newKey = `doc${Object.keys(docLinks).length + 1}`;
     const newLayoutItem = { i: newKey, x: 0, y: 0, w: 2, h: 0.4, minH: 0 };
   
     // Clone the current layouts and add the new item
@@ -70,47 +108,11 @@ const ProjectBox: React.FC = () => {
     };
   
     // Clone the current links and add the new link
-    const newLinks = { ...googleDocLinks, [newKey]: link };
+    const newLinks = { ...docLinks, [newKey]: link };
   
     setLayouts(newLayouts);
-    setGoogleDocLinks(newLinks);
-    handleModalCloseGoogleDoc();
-  };
-
-  const addGoogleSlideLinkToLayout = (link: string) => {
-    const newKey = `googleSlide${Object.keys(googleSlideLinks).length + 1}`;
-    const newLayoutItem = { i: newKey, x: 11, y: 0, w: 2, h: 0.4, minH: 0 };
-  
-    // Clone the current layouts and add the new item
-    const newLayouts = {
-      lg: [...layouts.lg, newLayoutItem],
-      md: [...layouts.md, newLayoutItem]
-    };
-  
-    // Clone the current links and add the new link
-    const newLinks = { ...googleSlideLinks, [newKey]: link };
-  
-    setLayouts(newLayouts);
-    setGoogleSlideLinks(newLinks);
-    handleModalCloseGoogleSlide();
-  };
-
-  const addGoogleSheetLinkToLayout = (link: string) => {
-    const newKey = `googleSheet${Object.keys(googleSheetLinks).length + 1}`;
-    const newLayoutItem = { i: newKey, x: 14, y: 0, w: 2, h: 0.4, minH: 0 };
-  
-    // Clone the current layouts and add the new item
-    const newLayouts = {
-      lg: [...layouts.lg, newLayoutItem],
-      md: [...layouts.md, newLayoutItem]
-    };
-  
-    // Clone the current links and add the new link
-    const newLinks = { ...googleSheetLinks, [newKey]: link };
-  
-    setLayouts(newLayouts);
-    setGoogleSheetLinks(newLinks);
-    handleModalCloseGoogleSheet();
+    setDocLinks(newLinks);
+    handleModalCloseDoc();
   };
    
   const addWebLinkToLayout = (link: string) => {
@@ -146,21 +148,13 @@ const ProjectBox: React.FC = () => {
 
     setLayouts(newLayouts);
     setStickyNotes(newStickyNotes);
-
+    handleCloseRightClick();
     console.log("adding sticky note")
   
   }
   
-  const actions = [
-    { icon: <DescriptionIcon />, name: 'Google Doc', click: handleModalOpenGoogleDoc},
-    { icon: <CoPresentIcon />, name: 'Google Slides', click: handleModalOpenGoogleSlide },
-    { icon: <GridOnIcon />, name: 'Google Sheet', click: handleModalOpenGoogleSheet },
-    { icon: <LinkIcon />, name: 'Link', click: handleModalOpenLink },
-    { icon: <StickyNote2Icon />, name: 'Sticky Note', click: addStickyNote}
-  ];
-
+  //Initial layout with state
   const layout: Layout[] = [
-    { i: "addButton", x: 38, y: 0.8, w: 2, h: 3, static: true, minW: 2, minH: 0},
     { i: "exampleStickyNote", x: 0, y: 0, w: 7, h: 1, minW: 2, minH: 0, resizeHandles: ['se']},
     { i: "exampleDocLink1", x: 7, y: 0, w: 2, h: 0.4, minH: 0},
     { i: "exampleDocLink2", x: 9, y: 0, w: 2, h: 0.4, minH: 0},
@@ -173,6 +167,8 @@ const ProjectBox: React.FC = () => {
     md: layout
   });
 
+
+  // Render begins here
   return (
     <>
       <GlobalStyles styles={{
@@ -199,23 +195,28 @@ const ProjectBox: React.FC = () => {
         }
         
       }}/>
-        <AppBar position="static" sx={{ flexGrow: 1, backgroundColor: "#eee", margin: '10px', borderRadius: '5px', width: 'inherit'}}>
-          <Toolbar>
-            <IconButton
-              size="large"
-              edge="start"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'rgba(0, 0, 0, 0.54)' }}>
-              Project Box
-            </Typography>
-          </Toolbar>
-        </AppBar>
 
-      <Box sx={{height:'620px', transform: 'translateZ(0px)', flexGrow: 1, backgroundColor: "#eee", margin: '10px', borderRadius: '5px', boxShadow: "0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)"}}>
+      <Box onContextMenu={handleRightClick} sx={{height: '500px', transform: 'translateZ(0px)', flexGrow: 1,
+       backgroundColor: "#eee", margin: '10px', borderRadius: '5px', 
+       boxShadow: "0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)"}}>
+        {/* Handling Right Clicks */}
+        <Menu
+          open={contextMenu !== null}
+          onClose={handleCloseRightClick}
+          anchorReference="anchorPosition"
+          anchorPosition={
+            contextMenu !== null
+              ? { top: contextMenu.mouseY, left: contextMenu.mouseX }
+              : undefined
+          }
+        >
+          <MenuItem onClick={addStickyNote}>Sticky Note</MenuItem>
+          <MenuItem onClick={handleModalOpenDoc}>Document</MenuItem>
+          <MenuItem onClick={handleModalOpenLink}>Link</MenuItem>
+
+        </Menu>
+
+        {/* Central Layout */}
         <ResponsiveReactGridLayout 
           className="layout" 
           layouts={layouts} 
@@ -223,10 +224,14 @@ const ProjectBox: React.FC = () => {
           cols={{lg: 40, md: 20}} 
           compactType={null} 
           draggableHandle=".dragHandle"
-          isBounded={true} >
-
+          isBounded={true} 
+          >
+          
+          
           {/* Example components */}
-          <Card key='exampleStickyNote' className="stickyNote" variant='outlined' sx={{ display: 'flex', flexDirection: 'column', '&:hover': {border: '1px dotted', borderColor: 'primary.dark', borderRadius: '5px'}, }}>
+          <Card key='exampleStickyNote' className="stickyNote" variant='outlined' 
+          sx={{ display: 'flex', flexDirection: 'column', 
+          '&:hover': {border: '1px dotted', borderColor: 'primary.dark', borderRadius: '5px'}, }}>
             <CardHeader className="dragHandle" sx={{ bgcolor: 'grey.300', padding: '10px' }}/>
             <Box sx={{ flex: 1, overflow: 'hidden', p: 2 }}>
               <TextareaAutosize
@@ -294,26 +299,10 @@ const ProjectBox: React.FC = () => {
             <Link sx={{fontSize: 12, textAlign:'center'}} href="http://docs.google.com/" underline="hover" target="_blank">Finances</Link>
           </Box>
 
-           {/* Components that can be added */}
-          <SpeedDial
-            key="addButton"
-            ariaLabel="SpeedDial basic example"
-            icon={<SpeedDialIcon />}
-          >
-            {actions.map((action) => (
-              <SpeedDialAction
-                key={action.name}
-                icon={action.icon}
-                tooltipTitle={action.name}
-                onClick={action.click}
-              />
-            ))}
-          </SpeedDial>
-
-          {/* Google Doc components */}
+          {/*  Doc components */}
           {layouts.lg.map(layoutItem => {
             // Check if the layout item key is in googleDocLinks
-            if (googleDocLinks[layoutItem.i]) {
+            if (docLinks[layoutItem.i]) {
               return (
                 <Box key={layoutItem.i} 
                 className="dragHandle" 
@@ -326,61 +315,11 @@ const ProjectBox: React.FC = () => {
                 }}
                 >
                   <DescriptionIcon sx={{fontSize: 40, paddingBottom: '5px'}}/>
-                  <Link sx={{fontSize: 12, textAlign:'center'}} href={googleDocLinks[layoutItem.i]} underline="hover" target="_blank">Google Doc Link</Link>
+                  <Link sx={{fontSize: 12, textAlign:'center'}} href={docLinks[layoutItem.i]} underline="hover" target="_blank">{truncateURL(docLinks[layoutItem.i])}</Link>
                 </Box>
               );
             } else {
               // Return null or some other component for non-Google Doc layout items
-              return null;
-            }
-          })}
-
-          {/* Google Slide components */}
-          {layouts.lg.map(layoutItem => {
-            // Check if the layout item key is in googleDocLinks
-            if (googleSlideLinks[layoutItem.i]) {
-              return (
-                <Box key={layoutItem.i} 
-                className="dragHandle" 
-                sx={{ 
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  '&:hover': { border: '1px dotted', borderColor: 'primary.dark', borderRadius: '5px'}
-                }}
-                >
-                  <CoPresentIcon sx={{fontSize: 40, paddingBottom: '5px'}}/>
-                  <Link sx={{fontSize: 12, textAlign:'center'}} href={googleSlideLinks[layoutItem.i]} underline="hover" target="_blank">Google Slide Link</Link>
-                </Box>
-              );
-            } else {
-              // Return null or some other component for non-Google Slide layout items
-              return null;
-            }
-          })}
-
-          {/* Google Sheet components */}
-          {layouts.lg.map(layoutItem => {
-            // Check if the layout item key is in googleDocLinks
-            if (googleSheetLinks[layoutItem.i]) {
-              return (
-                <Box key={layoutItem.i} 
-                className="dragHandle" 
-                sx={{ 
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  '&:hover': { border: '1px dotted', borderColor: 'primary.dark', borderRadius: '5px'}
-                }}
-                >
-                  <GridOnIcon sx={{fontSize: 40, paddingBottom: '5px'}}/>
-                  <Link sx={{fontSize: 12, textAlign:'center'}} href={googleSheetLinks[layoutItem.i]} underline="hover" target="_blank">Google Sheet Link</Link>
-                </Box>
-              );
-            } else {
-              // Return null or some other component for non-Google Sheet layout items
               return null;
             }
           })}
@@ -401,7 +340,7 @@ const ProjectBox: React.FC = () => {
                 }}
                 >
                   <LinkIcon sx={{fontSize: 40, paddingBottom: '5px'}}/>
-                  <Link sx={{fontSize: 12, textAlign:'center'}} href={webLinks[layoutItem.i]} underline="hover" target="_blank">Web Link</Link>
+                  <Link sx={{fontSize: 12, textAlign:'center'}} href={webLinks[layoutItem.i]} underline="hover" target="_blank">{truncateURL(webLinks[layoutItem.i])}</Link>
                 </Box>
               );
             } else {
@@ -437,45 +376,16 @@ const ProjectBox: React.FC = () => {
 
         </ResponsiveReactGridLayout>
 
-        {/* Modals that open up */}
+        {/* Modal for adding docs and weblinks */}
         <Modal
-          open={modalGoogleDocOpen}
-          onClose={handleModalCloseGoogleDoc}
-          aria-labelledby="add google doc"
-          aria-describedby="modal for adding google doc to the layout"
+          open={modalDocOpen}
+          onClose={handleModalCloseDoc}
+          aria-labelledby="add doc"
+          aria-describedby="modal for adding a doc to the layout"
         >
           <Box sx={modalStyle}>
-            <TextField id="title" label="Title" sx={{paddingBottom: '10px'}} />
-            <TextField id="googledoclink" label="Link to Google Doc" rows={4} multiline />
-            <Button sx={{marginTop: '10px', width: '10%',  alignSelf: 'center'}} variant='contained' onClick={() => addGoogleDocLinkToLayout(document.getElementById('googledoclink').value)}>
-              Add
-            </Button>
-          </Box>
-        </Modal>
-        <Modal
-          open={modalGoogleSlideOpen}
-          onClose={handleModalCloseGoogleSlide}
-          aria-labelledby="add google slide"
-          aria-describedby="modal for adding google slide to the layout"
-        >
-          <Box sx={modalStyle}>
-            <TextField id="title" label="Title" sx={{paddingBottom: '10px'}} />
-            <TextField id="googleslidelink" label="Link to Google Slide" rows={4} multiline />
-            <Button sx={{marginTop: '10px', width: '10%',  alignSelf: 'center'}} variant='contained' onClick={() => addGoogleSlideLinkToLayout(document.getElementById('googleslidelink').value)}>
-              Add
-            </Button>
-          </Box>
-        </Modal>
-        <Modal
-          open={modalGoogleSheetOpen}
-          onClose={handleModalCloseGoogleSheet}
-          aria-labelledby="add google sheet"
-          aria-describedby="modal for adding google sheet to the layout"
-        >
-          <Box sx={modalStyle}>
-            <TextField id="title" label="Title" sx={{paddingBottom: '10px'}} />
-            <TextField id="googlesheetlink" label="Link to Google Sheet"  rows={4} multiline />
-            <Button sx={{marginTop: '10px', width: '10%',  alignSelf: 'center'}} variant='contained' onClick={() => addGoogleSheetLinkToLayout(document.getElementById('googlesheetlink').value)}>
+            <TextField id="doclink" label="Add File Path or Link" rows={2} multiline />
+            <Button sx={{marginTop: '10px', width: '10%',  alignSelf: 'center'}} variant='contained' onClick={() => addDoctoLayOut(document.getElementById('doclink').value)}>
               Add
             </Button>
           </Box>
@@ -487,8 +397,7 @@ const ProjectBox: React.FC = () => {
           aria-describedby="modal for adding web link to the layout"
         >
           <Box sx={modalStyle}>
-            <TextField id="title" label="Title" sx={{paddingBottom: '10px'}} />
-            <TextField id="weblink" label="Link" rows={4} multiline  />
+            <TextField id="weblink" label="Add URL" rows={2} multiline  />
             <Button sx={{marginTop: '10px', width: '10%',  alignSelf: 'center'}} variant='contained' onClick={() => addWebLinkToLayout(document.getElementById('weblink').value)}>
               Add
             </Button>
