@@ -197,8 +197,7 @@ const ProjectBox: React.FC = () => {
       }}/>
 
       <Box onContextMenu={handleRightClick} sx={{height: '500px', transform: 'translateZ(0px)', flexGrow: 1,
-       backgroundColor: "#eee", margin: '10px', borderRadius: '5px', 
-       boxShadow: "0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)"}}>
+       backgroundColor: "white"}}>
         {/* Handling Right Clicks */}
         <Menu
           open={contextMenu !== null}
@@ -384,7 +383,7 @@ const ProjectBox: React.FC = () => {
           aria-describedby="modal for adding a doc to the layout"
         >
           <Box sx={modalStyle}>
-            <TextField id="doclink" label="Add File Path or Link" rows={2} multiline />
+            <TextField id="doclink" label="File Path or Link" rows={2} multiline />
             <Button sx={{marginTop: '10px', width: '10%',  alignSelf: 'center'}} variant='contained' onClick={() => addDoctoLayOut(document.getElementById('doclink').value)}>
               Add
             </Button>
@@ -397,7 +396,7 @@ const ProjectBox: React.FC = () => {
           aria-describedby="modal for adding web link to the layout"
         >
           <Box sx={modalStyle}>
-            <TextField id="weblink" label="Add URL" rows={2} multiline  />
+            <TextField id="weblink" label="URL" rows={2} multiline  />
             <Button sx={{marginTop: '10px', width: '10%',  alignSelf: 'center'}} variant='contained' onClick={() => addWebLinkToLayout(document.getElementById('weblink').value)}>
               Add
             </Button>
