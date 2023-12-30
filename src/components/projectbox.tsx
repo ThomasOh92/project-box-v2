@@ -9,6 +9,9 @@ import GridOnIcon from '@mui/icons-material/GridOn';
 import LinkIcon from '@mui/icons-material/Link';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import CircularProgress from '@mui/material/CircularProgress';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { GlobalStyles } from '@mui/system';
 
 
@@ -32,12 +35,25 @@ const ProjectBox: React.FC = () => {
   }
   const handleModalCloseLink = () => setModalLinkOpen(false);
 
+  // State to open modal for bulk load
+  const [modalBulkLoadOpen, setModalBulkLoadOpen] = React.useState(false);
+  const handleModalOpenBulkLoad = () => {
+    setModalBulkLoadOpen(true);
+    handleCloseRightClick();
+  }
+  const handleModalCloseBulkLoad = () => setModalLinkOpen(false);
+
   // State to open menu on right click
   const [contextMenu, setContextMenu] = useState<{
     mouseX: number;
     mouseY: number;
   } | null>(null);
 
+
+  // State to trigger delete buttons visibility
+  const [showDeleteButtons, setShowDeleteButtons] = useState(false);
+
+  
   // States for adding new docs, links or sticky note
   const [docLinks, setDocLinks] = useState<Record<string, string>>({});
   const [webLinks, setWebLinks] = useState<Record<string, string>>({});
@@ -51,7 +67,7 @@ const ProjectBox: React.FC = () => {
     transform: 'translate(-50%, -50%)',
     width: 400,
     bgcolor: 'background.paper',
-    border: '2px solid #000',
+    borderRadius: '5px',
     boxShadow: 24,
     p: 4,
     display: 'flex',
@@ -152,15 +168,63 @@ const ProjectBox: React.FC = () => {
     console.log("adding sticky note")
   
   }
-  
+
+  const deleteStickyNote = (keyToDelete: string) => {
+    // Create a copy of the current sticky notes state
+    const updatedStickyNotes = { ...stickyNotes };
+
+    // Delete the sticky note with the specified key
+    delete updatedStickyNotes[keyToDelete];
+
+    // Update the sticky notes state
+    setStickyNotes(updatedStickyNotes);
+
+    // Update the layouts to remove the deleted item's layout
+    const updatedLayouts = {
+      lg: layouts.lg.filter((item) => item.i !== keyToDelete),
+      md: layouts.md.filter((item) => item.i !== keyToDelete),
+    };
+    setLayouts(updatedLayouts);
+  };
+
+  const deleteWebLink = (keyToDelete: string) => {
+    // Create a copy of the current sticky notes state
+    const updatedWebLinks = { ...webLinks };
+
+    // Delete the sticky note with the specified key
+    delete updatedWebLinks[keyToDelete];
+
+    // Update the sticky notes state
+    setWebLinks(updatedWebLinks);
+
+    // Update the layouts to remove the deleted item's layout
+    const updatedLayouts = {
+      lg: layouts.lg.filter((item) => item.i !== keyToDelete),
+      md: layouts.md.filter((item) => item.i !== keyToDelete),
+    };
+    setLayouts(updatedLayouts);
+  };
+
+  const deleteDoc = (keyToDelete: string) => {
+    // Create a copy of the current sticky notes state
+    const updatedDocs = { ...docLinks };
+
+    // Delete the sticky note with the specified key
+    delete updatedDocs[keyToDelete];
+
+    // Update the sticky notes state
+    setDocLinks(updatedDocs);
+
+    // Update the layouts to remove the deleted item's layout
+    const updatedLayouts = {
+      lg: layouts.lg.filter((item) => item.i !== keyToDelete),
+      md: layouts.md.filter((item) => item.i !== keyToDelete),
+    };
+    setLayouts(updatedLayouts);
+  };
+
   //Initial layout with state
-  const layout: Layout[] = [
-    { i: "exampleStickyNote", x: 0, y: 0, w: 7, h: 1, minW: 2, minH: 0, resizeHandles: ['se']},
-    { i: "exampleDocLink1", x: 7, y: 0, w: 2, h: 0.4, minH: 0},
-    { i: "exampleDocLink2", x: 9, y: 0, w: 2, h: 0.4, minH: 0},
-    { i: "exampleSlideLink", x: 11, y: 0, w: 2, h: 0.4, minH: 0 },
-    { i: "exampleSheetLink", x: 13, y: 0, w: 2, h: 0.4, minH: 0},
-  ];
+  const layout: Layout[] = [];
 
   const [layouts, setLayouts] = useState({
     lg: layout,
@@ -212,8 +276,14 @@ const ProjectBox: React.FC = () => {
           <MenuItem onClick={addStickyNote}>Sticky Note</MenuItem>
           <MenuItem onClick={handleModalOpenDoc}>Document</MenuItem>
           <MenuItem onClick={handleModalOpenLink}>Link</MenuItem>
-
+          <MenuItem onClick={handleModalOpenBulkLoad}>Bulk Load (beta)</MenuItem>
         </Menu>
+
+        <Box sx={{ position: 'absolute', top: 0, right: 0 }}>
+          <IconButton aria-label="delete" size="medium" color="error"  onClick={() => setShowDeleteButtons(!showDeleteButtons)}>
+            <DeleteIcon />
+          </IconButton>
+        </Box>
 
         {/* Central Layout */}
         <ResponsiveReactGridLayout 
@@ -226,78 +296,6 @@ const ProjectBox: React.FC = () => {
           isBounded={true} 
           >
           
-          
-          {/* Example components */}
-          <Card key='exampleStickyNote' className="stickyNote" variant='outlined' 
-          sx={{ display: 'flex', flexDirection: 'column', 
-          '&:hover': {border: '1px dotted', borderColor: 'primary.dark', borderRadius: '5px'}, }}>
-            <CardHeader className="dragHandle" sx={{ bgcolor: 'grey.300', padding: '10px' }}/>
-            <Box sx={{ flex: 1, overflow: 'hidden', p: 2 }}>
-              <TextareaAutosize
-                defaultValue="Content..."
-                minRows={3} 
-                style={{ width: '100%', height:'100%', border: 'none', 
-                fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-                fontSize: '10',
-                outline: 'none',
-                resize: 'none'
-                 }} 
-              />
-            </Box>
-          </Card>
-          <Box key='exampleDocLink1' 
-          className="dragHandle" 
-          sx={{ 
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            '&:hover': { border: '1px dotted', borderColor: 'primary.dark', borderRadius: '5px'},
-           }}
-          >
-            <DescriptionIcon sx={{fontSize: 40, paddingBottom: '5px'}}/>
-            <Link sx={{fontSize: 12, textAlign:'center'}} href="http://docs.google.com/" underline="hover" target="_blank">Overall Plan</Link>
-          </Box>
-          <Box key='exampleDocLink2' 
-          className="dragHandle" 
-          sx={{ 
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            '&:hover': { border: '1px dotted', borderColor: 'primary.dark', borderRadius: '5px'},
-           }}
-          >
-            <DescriptionIcon sx={{fontSize: 40, paddingBottom: '5px'}}/>
-            <Link sx={{fontSize: 12, textAlign:'center'}} href="http://docs.google.com/" underline="hover" target="_blank">References</Link>
-          </Box>
-          <Box key='exampleSlideLink' 
-          className="dragHandle" 
-          sx={{ 
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            '&:hover': { border: '1px dotted', borderColor: 'primary.dark', borderRadius: '5px'},
-           }}
-          >
-            <CoPresentIcon sx={{fontSize: 40, paddingBottom: '5px'}}/>
-            <Link sx={{fontSize: 12, textAlign:'center'}} href="http://docs.google.com/" underline="hover" target="_blank">Presentation</Link>
-          </Box>
-          <Box key='exampleSheetLink' 
-          className="dragHandle" 
-          sx={{ 
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            '&:hover': { border: '1px dotted', borderColor: 'primary.dark', borderRadius: '5px'},
-           }}
-          >
-            <GridOnIcon sx={{fontSize: 40, paddingBottom: '5px'}}/>
-            <Link sx={{fontSize: 12, textAlign:'center'}} href="http://docs.google.com/" underline="hover" target="_blank">Finances</Link>
-          </Box>
-
           {/*  Doc components */}
           {layouts.lg.map(layoutItem => {
             // Check if the layout item key is in googleDocLinks
@@ -313,6 +311,11 @@ const ProjectBox: React.FC = () => {
                   '&:hover': { border: '1px dotted', borderColor: 'primary.dark', borderRadius: '5px'}
                 }}
                 >
+                {showDeleteButtons && (
+                  <IconButton aria-label="delete" size="small" color="error" onClick={() => deleteWebLink(layoutItem.i)} sx={{position: 'absolute', top: '0', right: '0'}}>
+                    <DeleteIcon fontSize="small" />
+                  </IconButton>
+                )}
                   <DescriptionIcon sx={{fontSize: 40, paddingBottom: '5px'}}/>
                   <Link sx={{fontSize: 12, textAlign:'center'}} href={docLinks[layoutItem.i]} underline="hover" target="_blank">{truncateURL(docLinks[layoutItem.i])}</Link>
                 </Box>
@@ -338,6 +341,11 @@ const ProjectBox: React.FC = () => {
                   '&:hover': { border: '1px dotted', borderColor: 'primary.dark', borderRadius: '5px'}
                 }}
                 >
+                {showDeleteButtons && (
+                  <IconButton aria-label="delete" size="small" color="error" onClick={() => deleteWebLink(layoutItem.i)} sx={{position: 'absolute', top: '0', right: '0'}}>
+                    <DeleteIcon fontSize="small" />
+                  </IconButton>
+                )}
                   <LinkIcon sx={{fontSize: 40, paddingBottom: '5px'}}/>
                   <Link sx={{fontSize: 12, textAlign:'center'}} href={webLinks[layoutItem.i]} underline="hover" target="_blank">{truncateURL(webLinks[layoutItem.i])}</Link>
                 </Box>
@@ -352,7 +360,12 @@ const ProjectBox: React.FC = () => {
           {Object.keys(stickyNotes).map((key) => {
             return (
               <Card key={key} className="stickyNote" variant='outlined' sx={{ display: 'flex', flexDirection: 'column', '&:hover': { border: '1px dotted', borderColor: 'primary.dark', borderRadius: '5px'}}}>
-                <CardHeader className="dragHandle" sx={{ bgcolor: 'grey.200', padding: '10px' }}/>
+                {showDeleteButtons && (
+                  <IconButton aria-label="delete" size="small" color="error" onClick={() => deleteStickyNote(key)} sx={{position: 'absolute', top: '0', right: '0'}}>
+                    <DeleteIcon fontSize="inherit" />
+                  </IconButton>
+                )}
+                <CardHeader className="dragHandle" sx={{ bgcolor: 'grey.200', padding: '13px' }}/>
                 <Box sx={{ flex: 1, overflow: 'hidden', p: 2 }}>
                   <TextareaAutosize
                     defaultValue="Content..."
@@ -402,6 +415,17 @@ const ProjectBox: React.FC = () => {
             </Button>
           </Box>
         </Modal>
+        <Modal
+          open={modalBulkLoadOpen}
+          onClose={handleModalCloseBulkLoad}
+          aria-labelledby="Bulk Load"
+          aria-describedby="modal for displaying bulk load progress"
+        >
+          <Box sx={modalStyle}>
+            <CircularProgress sx={{alignSelf: 'center'}}/>
+          </Box>
+        </Modal>
+        
     </Box>
   </>
   );
