@@ -205,24 +205,6 @@ const ProjectBox: React.FC = () => {
     setLayouts(updatedLayouts);
   };
 
-  const deleteDoc = (keyToDelete: string) => {
-    // Create a copy of the current sticky notes state
-    const updatedDocs = { ...docLinks };
-
-    // Delete the sticky note with the specified key
-    delete updatedDocs[keyToDelete];
-
-    // Update the sticky notes state
-    setDocLinks(updatedDocs);
-
-    // Update the layouts to remove the deleted item's layout
-    const updatedLayouts = {
-      lg: layouts.lg.filter((item) => item.i !== keyToDelete),
-      md: layouts.md.filter((item) => item.i !== keyToDelete),
-    };
-    setLayouts(updatedLayouts);
-  };
-
   //Initial layout with state
   const layout: Layout[] = [];
 
