@@ -1,11 +1,9 @@
 import * as React from 'react';
-const { useState } = React;
+import db from '../firebaseconfig'; // Assuming this is your Firestore instance
 import { WidthProvider, Responsive, Layout } from 'react-grid-layout';
 import {Box, TextareaAutosize, Button, TextField, Modal}  from '@mui/material';
 import { Card, CardHeader, Link } from '@mui/material';
 import DescriptionIcon from '@mui/icons-material/Description';
-import CoPresentIcon from '@mui/icons-material/CoPresent';
-import GridOnIcon from '@mui/icons-material/GridOn';
 import LinkIcon from '@mui/icons-material/Link';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -14,6 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { GlobalStyles } from '@mui/system';
 
+const { useState } = React;
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
