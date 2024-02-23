@@ -10,6 +10,7 @@ import MenuItem from '@mui/material/MenuItem';
 import CircularProgress from '@mui/material/CircularProgress';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import SaveIcon from '@mui/icons-material/Save';
 import { GlobalStyles } from '@mui/system';
 
 const { useState } = React;
@@ -204,6 +205,41 @@ const ProjectBox: React.FC = () => {
     setLayouts(updatedLayouts);
   };
 
+  // const saveLayoutToFirestore = async () => {
+  //   const layoutData = {
+  //     layouts, // Contains both lg and md layouts
+  //     docLinks,
+  //     webLinks,
+  //     stickyNotes,
+  //   };
+  
+  //   try {
+  //     await db.collection('yourCollectionName').doc('yourDocumentId').set(layoutData);
+  //     console.log('Layout saved successfully');
+  //   } catch (error) {
+  //     console.error('Error saving layout: ', error);
+  //   }
+  // };
+  
+  // React.useEffect(() => {
+  //   const loadLayoutFromFirestore = async () => {
+  //     const doc = await db.collection('yourCollectionName').doc('yourDocumentId').get();
+  //     if (doc.exists) {
+  //       const data = doc.data();
+  //       setLayouts(data.layouts);
+  //       setDocLinks(data.docLinks);
+  //       setWebLinks(data.webLinks);
+  //       setStickyNotes(data.stickyNotes);
+  //     } else {
+  //       console.log('No such document!');
+  //     }
+  //   };
+  
+  //   loadLayoutFromFirestore();
+  // }, []);
+  
+
+
   //Initial layout with state
   const layout: Layout[] = [];
 
@@ -263,6 +299,12 @@ const ProjectBox: React.FC = () => {
         <Box sx={{ position: 'absolute', top: 0, right: 0 }}>
           <IconButton aria-label="delete" size="medium" color="error"  onClick={() => setShowDeleteButtons(!showDeleteButtons)}>
             <DeleteIcon />
+          </IconButton>
+        </Box>
+
+        <Box sx={{ position: 'absolute', top: 0, right: 40 }}>
+          <IconButton aria-label="save" size="medium" color="primary"  onClick={() => console.log("hello")}>
+            <SaveIcon />
           </IconButton>
         </Box>
 
