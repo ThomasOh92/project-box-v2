@@ -308,6 +308,7 @@ const ProjectBox: React.FC = () => {
           </IconButton>
         </Box>
 
+
         {/* Central Layout */}
         <ResponsiveReactGridLayout 
           className="layout" 
