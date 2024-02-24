@@ -1,5 +1,6 @@
 import * as React from 'react';
-import db from '../firebaseconfig'; // Assuming this is your Firestore instance
+import { db } from '../firebaseconfig'; // Assuming this is your Firestore instance
+import { doc, setDoc } from "firebase/firestore"; 
 import { WidthProvider, Responsive, Layout } from 'react-grid-layout';
 import {Box, TextareaAutosize, Button, TextField, Modal}  from '@mui/material';
 import { Card, CardHeader, Link } from '@mui/material';
@@ -55,6 +56,12 @@ const ProjectBox: React.FC = () => {
 
   
   // States for adding new docs, links or sticky note
+  //Initial layout with state
+  const layout: Layout[] = [];
+  const [layouts, setLayouts] = useState({
+    lg: layout,
+    md: layout
+  });
   const [docLinks, setDocLinks] = useState<Record<string, string>>({});
   const [webLinks, setWebLinks] = useState<Record<string, string>>({});
   const [stickyNotes, setStickyNotes] = useState<Record<string, string>>({});
@@ -205,21 +212,25 @@ const ProjectBox: React.FC = () => {
     setLayouts(updatedLayouts);
   };
 
-  // const saveLayoutToFirestore = async () => {
-  //   const layoutData = {
-  //     layouts, // Contains both lg and md layouts
-  //     docLinks,
-  //     webLinks,
-  //     stickyNotes,
-  //   };
+  const saveLayoutToFirestore = async () => {
+    const layoutData = {
+      layouts,
+      docLinks,
+      webLinks,
+      stickyNotes,
+    };
   
-  //   try {
-  //     await db.collection('yourCollectionName').doc('yourDocumentId').set(layoutData);
-  //     console.log('Layout saved successfully');
-  //   } catch (error) {
-  //     console.error('Error saving layout: ', error);
-  //   }
-  // };
+  // Define a static ID for your project board
+  const boardId = "thom-first-board";
+
+
+    try {
+      await setDoc(doc(db, "thomas", boardId), layoutData); 
+      console.log("Document written with ID: ", boardId);
+    } catch (error) {
+      console.error('Error saving layout: ', error);
+    }
+  };
   
   // React.useEffect(() => {
   //   const loadLayoutFromFirestore = async () => {
@@ -240,13 +251,7 @@ const ProjectBox: React.FC = () => {
   
 
 
-  //Initial layout with state
-  const layout: Layout[] = [];
 
-  const [layouts, setLayouts] = useState({
-    lg: layout,
-    md: layout
-  });
 
 
   // Render begins here
@@ -303,7 +308,7 @@ const ProjectBox: React.FC = () => {
         </Box>
 
         <Box sx={{ position: 'absolute', top: 0, right: 40 }}>
-          <IconButton aria-label="save" size="medium" color="primary"  onClick={() => console.log("hello")}>
+          <IconButton aria-label="save" size="medium" color="primary"  onClick={() => saveLayoutToFirestore()}>
             <SaveIcon />
           </IconButton>
         </Box>
