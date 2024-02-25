@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { db } from '../firebaseconfig'; // Assuming this is your Firestore instance
-import { doc, setDoc } from "firebase/firestore"; 
+import { doc, setDoc, getDoc } from "firebase/firestore"; 
 import { WidthProvider, Responsive, Layout } from 'react-grid-layout';
 import {Box, TextareaAutosize, Button, TextField, Modal}  from '@mui/material';
 import { Card, CardHeader, Link } from '@mui/material';
@@ -212,6 +212,8 @@ const ProjectBox: React.FC = () => {
     setLayouts(updatedLayouts);
   };
 
+  const boardId = "thom-first-board";
+
   const saveLayoutToFirestore = async () => {
     const layoutData = {
       layouts,
@@ -219,11 +221,6 @@ const ProjectBox: React.FC = () => {
       webLinks,
       stickyNotes,
     };
-  
-  // Define a static ID for your project board
-  const boardId = "thom-first-board";
-
-
     try {
       await setDoc(doc(db, "thomas", boardId), layoutData); 
       console.log("Document written with ID: ", boardId);
@@ -232,22 +229,25 @@ const ProjectBox: React.FC = () => {
     }
   };
   
-  // React.useEffect(() => {
-  //   const loadLayoutFromFirestore = async () => {
-  //     const doc = await db.collection('yourCollectionName').doc('yourDocumentId').get();
-  //     if (doc.exists) {
-  //       const data = doc.data();
-  //       setLayouts(data.layouts);
-  //       setDocLinks(data.docLinks);
-  //       setWebLinks(data.webLinks);
-  //       setStickyNotes(data.stickyNotes);
-  //     } else {
-  //       console.log('No such document!');
-  //     }
-  //   };
+  React.useEffect(() => {
+    const loadLayoutFromFirestore = async () => {
+      const docRef = doc(db, 'thomas', boardId);
+      const docSnap = await getDoc(docRef); // Get the document snapshot
   
-  //   loadLayoutFromFirestore();
-  // }, []);
+      if (docSnap.exists()) {
+        const data = docSnap.data(); // Extract data from the document snapshot
+        setLayouts(data.layouts);
+        setDocLinks(data.docLinks);
+        setWebLinks(data.webLinks);
+        setStickyNotes(data.stickyNotes);
+      } else {
+        console.log('No such document!');
+      }
+    };
+  
+  
+    loadLayoutFromFirestore();
+  }, []);
   
 
 
